@@ -123,4 +123,12 @@ public class AttendanceController {
             return ResponseEntity.badRequest().build();
         }
     }
+    
+    @PostMapping("/debug")
+    public ResponseEntity<String> logDebugInfo(@RequestBody String debugInfo) {
+        System.out.println("=== DEBUG INFO ===");
+        System.out.println(debugInfo);
+        System.out.println("==================");
+        return ResponseEntity.ok("Debug info logged");
+    }
 } 

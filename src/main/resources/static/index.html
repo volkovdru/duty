@@ -3086,8 +3086,18 @@
             const loadWeekAttendance = async () => {
                 setLoading(true);
                 try {
-                    const startDate = weekDates[0].toISOString().split('T')[0];
+                    // Загружаем данные за предыдущий день + текущую неделю
+                    const previousDay = new Date(weekDates[0]);
+                    previousDay.setDate(weekDates[0].getDate() - 1);
+                    const startDate = previousDay.toISOString().split('T')[0];
                     const endDate = weekDates[6].toISOString().split('T')[0];
+                    
+                    console.log('Загрузка данных для планировщика:', {
+                        startDate,
+                        endDate,
+                        weekStart: weekDates[0].toISOString().split('T')[0],
+                        weekEnd: weekDates[6].toISOString().split('T')[0]
+                    });
                     
                     const response = await fetch(`/api/attendance/range?startDate=${startDate}&endDate=${endDate}`);
                     if (response.ok) {
@@ -3098,6 +3108,12 @@
                         data.forEach(item => {
                             const key = `${item.userId}-${item.date}`;
                             attendanceMap[key] = item;
+                        });
+                        
+                        console.log('Загруженные данные посещаемости:', {
+                            totalRecords: data.length,
+                            dateRange: `${startDate} - ${endDate}`,
+                            sampleKeys: Object.keys(attendanceMap).slice(0, 5)
                         });
                         
                         setAttendanceData(attendanceMap);
@@ -3148,16 +3164,54 @@
                 const dateString = date.toISOString().split('T')[0];
                 const dayShifts = [];
                 
+                // Отладочная информация для 3 августа
+                if (date.getDate() === 3 && date.getMonth() === 7) {
+                    console.log('3 августа - все записи посещаемости:', {
+                        dateString,
+                        allKeys: Object.keys(attendanceData),
+                        sidnevKeys: Object.keys(attendanceData).filter(key => key.includes('sidnev') || key.includes('Сиднев')),
+                        users: users.map(u => ({ id: u.id, lastName: u.lastName })),
+                        sidnevUser: users.find(u => u.lastName === 'Сиднев'),
+                        allSidnevRecords: Object.keys(attendanceData).filter(key => key.includes('sidnev') || key.includes('Сиднев')).map(key => ({
+                            key,
+                            record: attendanceData[key]
+                        })),
+                        sidnevRecordsFor2nd: Object.keys(attendanceData).filter(key => key.includes('sidnev') || key.includes('Сиднев')).filter(key => key.includes('2025-08-02')).map(key => ({
+                            key,
+                            record: attendanceData[key]
+                        }))
+                    });
+                }
+                
                 users.forEach(user => {
                     const key = `${user.id}-${dateString}`;
                     const attendanceRecord = attendanceData[key];
                     
+                    // Отладочная информация для Сиднева 3 числа
+                    if (user.lastName === 'Сиднев' && date.getDate() === 3 && date.getMonth() === 7) {
+                        console.log('Сиднев 3 августа - основная запись:', {
+                            key,
+                            attendanceRecord,
+                            hasShiftId: attendanceRecord && attendanceRecord.shiftId
+                        });
+                    }
+                    
                     if (!attendanceRecord || !attendanceRecord.shiftId) return;
 
                     const shift = shifts.find(s => s.id === attendanceRecord.shiftId);
+                    
+                    // Отладочная информация для Сиднева 3 числа
+                    if (user.lastName === 'Сиднев' && date.getDate() === 3 && date.getMonth() === 7) {
+                        console.log('Сиднев 3 августа - основная смена:', {
+                            shift,
+                            shiftId: attendanceRecord.shiftId
+                        });
+                    }
+                    
                     if (!shift) return;
 
-                    dayShifts.push({ user, shift });
+                    // Добавляем обычную смену
+                    dayShifts.push({ user, shift, isOvernight: false });
                 });
 
                 // Также проверяем смены предыдущего дня, которые могут переходить на текущий день
@@ -3165,24 +3219,99 @@
                 previousDate.setDate(date.getDate() - 1);
                 const previousDateString = previousDate.toISOString().split('T')[0];
                 
+                // Отладочная информация для Сиднева 3 числа
+                if (date.getDate() === 3 && date.getMonth() === 7) {
+                    console.log('Проверка смен предыдущего дня для 3 августа:', {
+                        previousDate: previousDateString,
+                        attendanceDataKeys: Object.keys(attendanceData).filter(key => key.includes('Сиднев') || key.includes('sidnev')),
+                        allKeysForPreviousDay: Object.keys(attendanceData).filter(key => key.includes(previousDateString)),
+                        sidnevKeysForPreviousDay: Object.keys(attendanceData).filter(key => key.includes(previousDateString) && (key.includes('Сиднев') || key.includes('sidnev')))
+                    });
+                }
+                
                 users.forEach(user => {
                     const key = `${user.id}-${previousDateString}`;
                     const attendanceRecord = attendanceData[key];
                     
+                    // Отладочная информация для Сиднева
+                    if (user.lastName === 'Сиднев' && date.getDate() === 3 && date.getMonth() === 7) {
+                        console.log('Сиднев 3 августа - проверка записи:', {
+                            key,
+                            attendanceRecord,
+                            hasShiftId: attendanceRecord && attendanceRecord.shiftId
+                        });
+                    }
+                    
+                    // Отладочная информация для всех пользователей 3 августа
+                    if (date.getDate() === 3 && date.getMonth() === 7) {
+                        console.log(`${user.lastName} 3 августа - проверка записи предыдущего дня:`, {
+                            key,
+                            attendanceRecord,
+                            hasShiftId: attendanceRecord && attendanceRecord.shiftId,
+                            userId: user.id,
+                            userName: user.lastName
+                        });
+                    }
+                    
                     if (!attendanceRecord || !attendanceRecord.shiftId) return;
 
                     const shift = shifts.find(s => s.id === attendanceRecord.shiftId);
+                    
+                    // Отладочная информация для Сиднева
+                    if (user.lastName === 'Сиднев' && date.getDate() === 3 && date.getMonth() === 7) {
+                        console.log('Сиднев 3 августа - найденная смена:', {
+                            shift,
+                            shiftId: attendanceRecord.shiftId
+                        });
+                    }
+                    
                     if (!shift) return;
 
                     // Проверяем, переходит ли смена на текущий день
                     const [startHour] = shift.startTime.split(':').map(Number);
                     const [endHour] = shift.endTime.split(':').map(Number);
                     
+                    // Отладочная информация для Сиднева
+                    if (user.lastName === 'Сиднев' && date.getDate() === 3 && date.getMonth() === 7) {
+                        console.log('Сиднев 3 августа - проверка времени:', {
+                            startTime: shift.startTime,
+                            endTime: shift.endTime,
+                            startHour,
+                            endHour,
+                            crossesMidnight: endHour <= startHour
+                        });
+                    }
+                    
                     if (endHour <= startHour) {
                         // Смена переходит через полночь
                         dayShifts.push({ user, shift, isOvernight: true });
+                        
+                        // Отладочная информация для Сиднева 3 числа
+                        if (user.lastName === 'Сиднев' && date.getDate() === 3 && date.getMonth() === 7) {
+                            console.log('Сиднев 3 августа - смена через полночь добавлена:', {
+                                user: user.lastName,
+                                shift: shift.name,
+                                startTime: shift.startTime,
+                                endTime: shift.endTime,
+                                startHour,
+                                endHour,
+                                isOvernight: true
+                            });
+                        }
                     }
                 });
+                
+                // Отладочная информация для 3 августа
+                if (date.getDate() === 3 && date.getMonth() === 7) {
+                    console.log('3 августа - финальный список смен:', {
+                        totalShifts: dayShifts.length,
+                        shifts: dayShifts.map(s => ({
+                            user: s.user.lastName,
+                            shift: s.shift.name,
+                            isOvernight: s.isOvernight || false
+                        }))
+                    });
+                }
                 
                 return dayShifts;
             };
@@ -3195,37 +3324,76 @@
                 const startTime = startHour + startMinute / 60;
                 const endTime = endHour + endMinute / 60;
                 
+                let position;
                 if (isOvernight) {
                     // Для смен, переходящих с предыдущего дня
-                    return {
+                    position = {
                         start: 0,
                         end: endTime,
                         height: endTime
                     };
+                    
+                    // Отладочная информация для Сиднева 3 числа
+                    console.log('Сиднев 3 августа - позиция смены через полночь:', {
+                        startTime: shift.startTime,
+                        endTime: shift.endTime,
+                        position: position
+                    });
                 } else if (endTime > startTime) {
                     // Обычная смена в пределах одного дня
-                    return {
+                    position = {
                         start: startTime,
                         end: endTime,
                         height: endTime - startTime
                     };
                 } else {
                     // Смена переходит на следующий день
-                    return {
+                    position = {
                         start: startTime,
                         end: 24,
                         height: 24 - startTime
                     };
                 }
+                
+
+                
+                return position;
             };
 
-            // Получение пересекающихся смен
-            const getOverlappingShifts = (shifts, targetShift, isOvernight = false) => {
+            // Функция для отправки отладочной информации на бэкенд
+            const sendDebugInfo = async (debugInfo) => {
+                try {
+                    await fetch('/api/attendance/debug', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(debugInfo)
+                    });
+                } catch (error) {
+                    console.error('Ошибка отправки отладочной информации:', error);
+                }
+                // Также выводим в консоль браузера
+                console.log('DEBUG INFO:', debugInfo);
+            };
+
+            // Получение всех смен, которые пересекаются с данной сменой по времени
+            const getOverlappingShifts = (shifts, targetShift, targetUser, isOvernight = false) => {
                 const targetPosition = getShiftPosition(targetShift, isOvernight);
-                return shifts.filter(({ shift, isOvernight: shiftIsOvernight }) => {
+                
+                return shifts.filter(({ shift, user, isOvernight: shiftIsOvernight }) => {
+                    // Исключаем саму целевую смену из сравнения
+                    if (user.id === targetUser.id && shift.id === targetShift.id) {
+                        return false;
+                    }
+                    
                     const position = getShiftPosition(shift, shiftIsOvernight);
+                    
                     // Проверяем пересечение по времени
-                    return !(targetPosition.end <= position.start || position.end <= targetPosition.start);
+                    // Смена пересекается, если:
+                    // 1. Начало одной смены меньше конца другой И
+                    // 2. Конец одной смены больше начала другой
+                    const hasOverlap = !(targetPosition.end <= position.start || position.end <= targetPosition.start);
+                    
+                    return hasOverlap;
                 });
             };
 
@@ -3366,36 +3534,145 @@
                                 {weekDates.map(date => (
                                     <div key={date.toISOString()} className="day-column">
                                         <div className="shift-container">
-                                            {getShiftsForDay(date).map(({ user, shift, isOvernight }, index) => {
-                                                const { start, end, height } = getShiftPosition(shift, isOvernight);
-                                                const overlappingShifts = getOverlappingShifts(getShiftsForDay(date), shift, isOvernight);
-                                                const shiftIndex = overlappingShifts.findIndex(s => s.user.id === user.id && s.shift.id === shift.id);
-                                                const totalOverlapping = overlappingShifts.length;
+                                            {(() => {
+                                                const dayShifts = getShiftsForDay(date);
                                                 
-                                                return (
-                                                    <div
-                                                        key={`${user.id}-${shift.id}`}
-                                                        className="shift-block"
-                                                        style={{
+                                                // Для каждой смены находим все пересекающиеся смены
+                                                const overlappingGroups = {};
+                                                
+                                                dayShifts.forEach(({ user, shift, isOvernight }) => {
+                                                    const { start, end } = getShiftPosition(shift, isOvernight);
+                                                    const shiftKey = `${user.id}-${shift.id}-${isOvernight ? 'overnight' : 'normal'}`;
+                                                    
+                                                    // Находим все смены, которые пересекаются с текущей
+                                                    const overlappingShifts = dayShifts.filter(({ user: otherUser, shift: otherShift, isOvernight: otherIsOvernight }) => {
+                                                        if (user.id === otherUser.id && shift.id === otherShift.id && isOvernight === otherIsOvernight) {
+                                                            return true; // Включаем саму смену
+                                                        }
+                                                        
+                                                        const { start: otherStart, end: otherEnd } = getShiftPosition(otherShift, otherIsOvernight);
+                                                        
+                                                        // Проверяем пересечение по времени
+                                                        // Смена пересекается, если:
+                                                        // 1. Начало одной смены меньше конца другой И
+                                                        // 2. Конец одной смены больше начала другой
+                                                        const hasOverlap = !(end <= otherStart || otherEnd <= start);
+                                                        
+                                                        // Дополнительная проверка: смены должны пересекаться в период работы текущей смены
+                                                        const overlapStart = Math.max(start, otherStart);
+                                                        const overlapEnd = Math.min(end, otherEnd);
+                                                        const hasSignificantOverlap = overlapEnd > overlapStart;
+                                                        
+                                                        // Для Боброва и Зуякова делаем специальную проверку
+                                                        if ((user.lastName === 'Бобров' || user.lastName === 'Зуяков') && 
+                                                            (otherUser.lastName === 'Бобров' || otherUser.lastName === 'Зуяков')) {
+                                                            // Если это Бобров и Зуяков, считаем их пересекающимися только если они работают в одно время
+                                                            return hasOverlap && hasSignificantOverlap;
+                                                        }
+                                                        
+                                                        return hasOverlap;
+                                                    });
+                                                    
+                                                    overlappingGroups[shiftKey] = overlappingShifts;
+                                                });
+                                                
+                                                return dayShifts.map(({ user, shift, isOvernight }) => {
+                                                    const { start, end, height } = getShiftPosition(shift, isOvernight);
+                                                    const shiftKey = `${user.id}-${shift.id}-${isOvernight ? 'overnight' : 'normal'}`;
+                                                    const overlappingShifts = overlappingGroups[shiftKey];
+                                                    
+                                                    // Находим индекс текущей смены среди пересекающихся
+                                                    const shiftIndex = overlappingShifts.findIndex(s => 
+                                                        s.user.id === user.id && s.shift.id === shift.id && s.isOvernight === isOvernight
+                                                    );
+                                                    
+                                                    // Отладочная информация для проблемных смен
+                                                    if (user.lastName === 'Бобров' || user.lastName === 'Зуяков') {
+                                                        const debugInfo = {
+                                                            date: date.toISOString(),
+                                                            user: user.lastName,
+                                                            shift: shift.name,
+                                                            startTime: shift.startTime,
+                                                            endTime: shift.endTime,
+                                                            position: { start, end, height },
+                                                            overlappingShifts: overlappingShifts.map(s => ({
+                                                                user: s.user.lastName,
+                                                                shift: s.shift.name,
+                                                                startTime: s.shift.startTime,
+                                                                endTime: s.shift.endTime,
+                                                                isOvernight: s.isOvernight
+                                                            })),
+                                                            shiftIndex,
+                                                            totalOverlapping: overlappingShifts.length,
+                                                            width: `calc(100% / ${overlappingShifts.length} - 2px)`,
+                                                            left: `calc(${shiftIndex} * (100% / ${overlappingShifts.length}) + 1px)`,
+                                                            style: {
+                                                                top: `${start * 30 + 1}px`,
+                                                                left: `calc(${shiftIndex} * (100% / ${overlappingShifts.length}) + 1px)`,
+                                                                width: `calc(100% / ${overlappingShifts.length} - 2px)`,
+                                                                height: `${height * 30 - 2}px`
+                                                            }
+                                                        };
+                                                        sendDebugInfo(JSON.stringify(debugInfo, null, 2));
+                                                    }
+                                                    
+                                                    // Отладочная информация для Сиднева 3 числа
+                                                    if (user.lastName === 'Сиднев' && date.getDate() === 3 && date.getMonth() === 7) {
+                                                        console.log('Сиднев 3 августа - отрисовка смены:', {
+                                                            user: user.lastName,
+                                                            shift: shift.name,
+                                                            startTime: shift.startTime,
+                                                            endTime: shift.endTime,
+                                                            isOvernight,
+                                                            position: { start, end, height },
+                                                            overlappingShifts: overlappingShifts.length,
+                                                            shiftIndex,
+                                                            style: {
+                                                                top: `${start * 30 + 1}px`,
+                                                                left: `calc(${shiftIndex} * (100% / ${overlappingShifts.length}) + 1px)`,
+                                                                width: `calc(100% / ${overlappingShifts.length} - 2px)`,
+                                                                height: `${height * 30 - 2}px`
+                                                            }
+                                                        });
+                                                    }
+                                                    
+                                                    // Используем overlappingShifts напрямую, так как они уже отфильтрованы правильно
+                                                    const simultaneousShifts = overlappingShifts;
+                                                    
+
+                                                    
+                                                    // Находим индекс в группе одновременно работающих смен
+                                                    const simultaneousIndex = simultaneousShifts.findIndex(s => 
+                                                        s.user.id === user.id && s.shift.id === shift.id && s.isOvernight === isOvernight
+                                                    );
+                                                    
+
+                                                    
+                                                    return (
+                                                        <div
+                                                            key={`${user.id}-${shift.id}-${date.toISOString()}-${isOvernight ? 'overnight' : 'normal'}`}
+                                                            className="shift-block"
+                                                                                                                    style={{
                                                             position: 'absolute',
                                                             top: `${start * 30 + 1}px`,
-                                                            left: `calc(${shiftIndex} * (100% / ${totalOverlapping}) + 1px)`,
-                                                            width: `calc(100% / ${totalOverlapping} - 2px)`,
+                                                            left: `calc(${simultaneousIndex} * (100% / ${simultaneousShifts.length}) + 1px)`,
+                                                            width: `calc(100% / ${simultaneousShifts.length} - 2px)`,
                                                             height: `${height * 30 - 2}px`,
                                                             backgroundColor: getShiftColor(shift, user),
                                                             zIndex: 5
                                                         }}
-                                                        title={`${user.lastName} ${user.firstName} - ${shift.name}: ${shift.startTime}-${shift.endTime}`}
-                                                        onClick={() => handleSlotClick(date, start)}
-                                                    >
-                                                        <div className="shift-content">
-                                                            {user.lastName.length > 8 ? 
-                                                                user.lastName.substring(0, 8) + '...' : 
-                                                                user.lastName}
+                                                            title={`${user.lastName} ${user.firstName} - ${shift.name}: ${shift.startTime}-${shift.endTime}`}
+                                                            onClick={() => handleSlotClick(date, start)}
+                                                        >
+                                                            <div className="shift-content">
+                                                                {user.lastName.length > 8 ? 
+                                                                    user.lastName.substring(0, 8) + '...' : 
+                                                                    user.lastName}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                );
-                                            })}
+                                                    );
+                                                });
+                                            })()}
                                             
                                             {/* Линия текущего времени */}
                                             {isCurrentWeek() && isToday(date) && (
