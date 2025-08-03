@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отладка часов Дмитрия Савинкова</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .button { 
+            background-color: #007bff; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin: 10px 0; 
+        }
+        .button:hover { background-color: #0056b3; }
+        .result { 
+            margin: 10px 0; 
+            padding: 10px; 
+            border-radius: 5px; 
+            white-space: pre-wrap; 
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>Отладка часов Дмитрия Савинкова</h1>
+    
+    <button class="button" onclick="checkSavinkovHours()">
+        Проверить часы Дмитрия Савинкова (31 июля - 1 августа)
+    </button>
+    
+    <button class="button" onclick="checkAllUsers()">
+        Проверить всех пользователей
+    </button>
+    
+    <button class="button" onclick="checkAttendance()">
+        Проверить посещаемость 31 декабря
+    </button>
+    
+    <button class="button" onclick="checkShifts()">
+        Проверить смены
+    </button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function checkSavinkovHours() {
+            try {
+                const response = await fetch('http://localhost:8081/api/hours/savinkov-august', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                showResult(result, response.ok, 'info');
+            } catch (error) {
+                showResult({ message: 'Ошибка: ' + error.message }, false, 'error');
+            }
+        }
+        
+        async function checkAllUsers() {
+            try {
+                const response = await fetch('http://localhost:8081/api/users', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                showResult(result, response.ok, 'info');
+            } catch (error) {
+                showResult({ message: 'Ошибка: ' + error.message }, false, 'error');
+            }
+        }
+        
+        async function checkAttendance() {
+            try {
+                const response = await fetch('http://localhost:8081/api/attendance/range?startDate=2024-07-31&endDate=2024-07-31', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                showResult(result, response.ok, 'info');
+            } catch (error) {
+                showResult({ message: 'Ошибка: ' + error.message }, false, 'error');
+            }
+        }
+        
+        async function checkShifts() {
+            try {
+                const response = await fetch('http://localhost:8081/api/shifts', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                showResult(result, response.ok, 'info');
+            } catch (error) {
+                showResult({ message: 'Ошибка: ' + error.message }, false, 'error');
+            }
+        }
+        
+        function showResult(data, isSuccess, type = 'success') {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result ' + (isSuccess ? type : 'error');
+            resultDiv.textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html> 

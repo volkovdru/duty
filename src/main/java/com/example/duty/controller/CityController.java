@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cities")
@@ -67,5 +69,31 @@ public class CityController {
     public ResponseEntity<List<CityDto>> searchCities(@RequestParam String query) {
         List<CityDto> cities = cityService.searchCities(query);
         return ResponseEntity.ok(cities);
+    }
+    
+    /**
+     * Получить часовые пояса всех городов
+     */
+    @GetMapping("/timezones")
+    public ResponseEntity<Map<String, Integer>> getCityTimezones() {
+        List<CityDto> cities = cityService.getAllCities();
+        Map<String, Integer> timezones = new HashMap<>();
+        
+        for (CityDto city : cities) {
+            String gmtTimezone = city.getGmtTimezone();
+            if (gmtTimezone != null && gmtTimezone.startsWith("GMT")) {
+                try {
+                    // Извлекаем число из строки типа "GMT+3" или "GMT-5"
+                    String offsetStr = gmtTimezone.substring(3);
+                    int offset = Integer.parseInt(offsetStr);
+                    timezones.put(gmtTimezone, offset);
+                } catch (NumberFormatException e) {
+                    // Если не удалось распарсить, используем значение по умолчанию
+                    timezones.put(gmtTimezone, 3);
+                }
+            }
+        }
+        
+        return ResponseEntity.ok(timezones);
     }
 } 

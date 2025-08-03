@@ -1,0 +1,298 @@
+/* Стили для компонентов табеля, рабочих часов и планировщика */
+
+/* Общие стили для контейнеров */
+.timesheet-container,
+.work-hours-container,
+.weekly-scheduler-container {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Заголовки компонентов */
+.timesheet-header,
+.work-hours-header,
+.scheduler-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.timesheet-header h2,
+.work-hours-header h2,
+.scheduler-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+/* Селекторы дат и недель */
+.date-selector,
+.week-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-selector label,
+.week-selector label {
+    font-weight: 500;
+    color: #555;
+}
+
+/* Элементы управления */
+.scheduler-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.view-mode {
+    display: flex;
+    gap: 15px;
+}
+
+.view-mode label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Таблицы */
+.timesheet-table,
+.work-hours-table,
+.scheduler-table {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.timesheet-table table,
+.work-hours-table table,
+.scheduler-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.timesheet-table th,
+.work-hours-table th,
+.scheduler-table th {
+    background: #f8f9fa;
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #dee2e6;
+}
+
+.timesheet-table td,
+.work-hours-table td,
+.scheduler-table td {
+    padding: 8px;
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+/* Специальные стили для планировщика */
+.day-header {
+    text-align: center;
+    min-width: 80px;
+}
+
+.day-name {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.day-number {
+    font-weight: bold;
+    color: #333;
+}
+
+.schedule-cell {
+    text-align: center;
+    min-width: 80px;
+    padding: 4px !important;
+}
+
+.schedule-cell select {
+    font-size: 0.8rem;
+    padding: 2px 4px;
+    margin-bottom: 2px;
+}
+
+.absence-check {
+    margin-top: 2px;
+}
+
+.absence-check input[type="checkbox"] {
+    transform: scale(0.8);
+}
+
+/* Стили для групп в планировщике */
+.group-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.group-shifts {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.shift-badge {
+    background: #007bff;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    display: inline-block;
+    margin: 1px;
+}
+
+.no-shift {
+    color: #999;
+    font-style: italic;
+}
+
+/* Сводки */
+.timesheet-summary,
+.work-hours-summary,
+.scheduler-summary {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.timesheet-summary h3,
+.work-hours-summary h3,
+.scheduler-summary h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.stat-item {
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    border-left: 4px solid #007bff;
+}
+
+.stat-item strong {
+    color: #333;
+}
+
+/* Специальные стили для рабочих часов */
+.total-hours,
+.overtime-hours {
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.total-hours {
+    background: #28a745;
+    color: white;
+}
+
+.overtime-hours {
+    background: #ffc107;
+    color: #333;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .timesheet-header,
+    .work-hours-header,
+    .scheduler-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .scheduler-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .view-mode {
+        justify-content: center;
+    }
+    
+    .summary-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .schedule-cell {
+        min-width: 60px;
+    }
+    
+    .schedule-cell select {
+        font-size: 0.7rem;
+    }
+}
+
+/* Анимации загрузки */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Стили для форм в таблицах */
+.timesheet-table input[type="text"],
+.work-hours-table input[type="number"],
+.schedule-cell select {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out;
+}
+
+.timesheet-table input[type="text"]:focus,
+.work-hours-table input[type="number"]:focus,
+.schedule-cell select:focus {
+    border-color: #007bff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Стили для чекбоксов */
+.timesheet-table input[type="checkbox"],
+.work-hours-table input[type="checkbox"] {
+    transform: scale(1.2);
+    margin: 0;
+}
+
+/* Цветовая схема для разных типов смен */
+.shift-badge.morning {
+    background: #28a745;
+}
+
+.shift-badge.evening {
+    background: #ffc107;
+    color: #333;
+}
+
+.shift-badge.night {
+    background: #6f42c1;
+}
+
+.shift-badge.weekend {
+    background: #dc3545;
+} 

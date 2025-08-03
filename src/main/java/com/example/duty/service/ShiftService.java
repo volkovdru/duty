@@ -39,13 +39,26 @@ public class ShiftService {
         shift.setStartTime(shiftDto.getStartTime());
         shift.setEndTime(shiftDto.getEndTime());
         
+        // Сначала сохраняем смену
+        Shift savedShift = shiftRepository.save(shift);
+        
         // Устанавливаем группы, если указаны
         if (shiftDto.getGroupIds() != null && !shiftDto.getGroupIds().isEmpty()) {
             List<Group> groups = groupRepository.findAllById(shiftDto.getGroupIds());
-            shift.setGroups(groups);
+            savedShift.setGroups(groups);
+            
+            // Добавляем смену в группы (синхронизируем двунаправленную связь)
+            for (Group group : groups) {
+                if (group.getShifts() == null) {
+                    group.setShifts(new java.util.HashSet<>());
+                }
+                group.getShifts().add(savedShift);
+                groupRepository.save(group);
+            }
+            
+            savedShift = shiftRepository.save(savedShift);
         }
         
-        Shift savedShift = shiftRepository.save(shift);
         return convertToDto(savedShift);
     }
     
@@ -56,12 +69,37 @@ public class ShiftService {
                     shift.setStartTime(shiftDto.getStartTime());
                     shift.setEndTime(shiftDto.getEndTime());
                     
+                    // Сначала удаляем смену из всех старых групп
+                    if (shift.getGroups() != null) {
+                        for (Group oldGroup : shift.getGroups()) {
+                            oldGroup.getShifts().remove(shift);
+                            groupRepository.save(oldGroup);
+                        }
+                    }
+                    
                     // Обновляем группы
-                    if (shiftDto.getGroupIds() != null) {
-                        List<Group> groups = groupRepository.findAllById(shiftDto.getGroupIds());
-                        shift.setGroups(groups);
+                    if (shiftDto.getGroupIds() != null && !shiftDto.getGroupIds().isEmpty()) {
+                        List<Group> newGroups = groupRepository.findAllById(shiftDto.getGroupIds());
+                        
+                        // Проверяем, что все запрошенные группы найдены
+                        if (newGroups.size() != shiftDto.getGroupIds().size()) {
+                            System.out.println("Warning: Not all groups found. Requested: " + 
+                                shiftDto.getGroupIds() + ", Found: " + newGroups.size());
+                        }
+                        
+                        // Устанавливаем новые группы для смены
+                        shift.setGroups(newGroups);
+                        
+                        // Добавляем смену в новые группы (синхронизируем двунаправленную связь)
+                        for (Group newGroup : newGroups) {
+                            if (newGroup.getShifts() == null) {
+                                newGroup.setShifts(new java.util.HashSet<>());
+                            }
+                            newGroup.getShifts().add(shift);
+                            groupRepository.save(newGroup);
+                        }
                     } else {
-                        shift.setGroups(null);
+                        shift.setGroups(java.util.Collections.emptyList());
                     }
                     
                     Shift savedShift = shiftRepository.save(shift);

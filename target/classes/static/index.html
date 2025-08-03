@@ -85,6 +85,624 @@
             font-weight: 600;
             margin: 0;
         }
+        
+        /* Стили для новых компонентов */
+        .timesheet-container,
+        .work-hours-container,
+        .weekly-scheduler-container {
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .timesheet-header,
+        .work-hours-header,
+        .scheduler-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .timesheet-header h2,
+        .work-hours-header h2,
+        .scheduler-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .date-selector,
+        .week-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-selector label,
+        .week-selector label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .scheduler-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .view-mode {
+            display: flex;
+            gap: 15px;
+        }
+
+        .view-mode label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .timesheet-table,
+        .work-hours-table,
+        .scheduler-table {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .day-header {
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .day-name {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .day-number {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .schedule-cell {
+            text-align: center;
+            min-width: 80px;
+            padding: 4px !important;
+        }
+
+        .schedule-cell select {
+            font-size: 0.8rem;
+            padding: 2px 4px;
+            margin-bottom: 2px;
+        }
+
+        .absence-check {
+            margin-top: 2px;
+        }
+
+        .absence-check input[type="checkbox"] {
+            transform: scale(0.8);
+        }
+
+        .group-cell {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .group-shifts {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .shift-badge {
+            background: #007bff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin: 1px;
+        }
+
+        .no-shift {
+            color: #999;
+            font-style: italic;
+        }
+
+        .timesheet-summary,
+        .work-hours-summary,
+        .scheduler-summary {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .timesheet-summary h3,
+        .work-hours-summary h3,
+        .scheduler-summary h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+
+        .stat-item strong {
+            color: #333;
+        }
+
+        .total-hours,
+        .overtime-hours {
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .total-hours {
+            background: #28a745;
+            color: white;
+        }
+
+        .overtime-hours {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        /* Стили для календарного табеля */
+        .timesheet-calendar {
+            font-size: 0.8rem;
+            table-layout: fixed;
+        }
+        
+        .month-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .month-navigation h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .employee-header {
+            width: 150px;
+            font-weight: bold;
+            background: #f8f9fa;
+        }
+        
+        .day-header {
+            width: 35px;
+            text-align: center;
+            padding: 4px 2px;
+            background: #f8f9fa;
+        }
+        
+        .day-header.weekend {
+            background: #ffe6e6;
+        }
+        
+        .day-number {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .day-name {
+            font-size: 0.7rem;
+            color: #666;
+        }
+        
+        .group-header-cell {
+            background: #e3f2fd;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .group-info h5 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+        
+        .shift-palette {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .shift-btn {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .shift-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .employee-name {
+            font-weight: 500;
+            padding: 8px;
+            background: #fafafa;
+            border-right: 2px solid #dee2e6;
+        }
+        
+        .employee-cell {
+            width: 35px;
+            height: 35px;
+            text-align: center;
+            vertical-align: middle;
+            position: relative;
+            padding: 2px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .employee-cell.weekend {
+            background: #f9f9f9;
+        }
+        
+        .employee-cell.assignable {
+            cursor: pointer;
+        }
+        
+        .employee-cell.assignable:hover {
+            background: #e3f2fd;
+        }
+        
+        .shift-badge {
+            display: inline-block;
+            background: #1976d2;
+            color: white;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            font-weight: bold;
+        }
+        
+        .assignment-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(25, 118, 210, 0.3);
+            border: 1px dashed #1976d2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.6rem;
+            color: #1976d2;
+            font-weight: bold;
+        }
+        
+        .clear-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(244, 67, 54, 0.3);
+            border: 1px dashed #f44336;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .timesheet-table-container {
+            overflow-x: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+        
+        /* Стили для календаря рабочих часов */
+        .work-hours-calendar {
+            font-size: 0.8rem;
+            table-layout: fixed;
+        }
+        
+        .work-hours-table-container {
+            overflow-x: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+        
+        .work-hours-cell {
+            width: 35px;
+            height: 45px;
+            text-align: center;
+            vertical-align: middle;
+            padding: 2px;
+            border: 1px solid #e0e0e0;
+            font-size: 0.6rem;
+        }
+        
+        .work-hours-cell.weekend {
+            background: #f5f5f5;
+        }
+        
+        .hours-display {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1px;
+        }
+        
+        .day-hours {
+            color: #1976d2;
+            font-weight: bold;
+            font-size: 0.6rem;
+        }
+        
+        .night-hours {
+            color: #9c27b0;
+            font-weight: bold;
+            font-size: 0.6rem;
+        }
+        
+        .no-hours {
+            color: #999;
+            font-style: italic;
+        }
+        
+        .employee-timezone {
+            font-size: 0.7rem;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .total-month-header {
+            width: 70px;
+            text-align: center;
+            background: #c8e6c9;
+            font-weight: bold;
+            font-size: 0.7rem;
+        }
+        
+        .total-hours-header {
+            width: 50px;
+            text-align: center;
+            background: #bbdefb;
+            font-weight: bold;
+            font-size: 0.7rem;
+        }
+        
+        .total-month-cell {
+            text-align: center;
+            background: #c8e6c9;
+            font-weight: bold;
+            padding: 4px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .total-hours-cell {
+            text-align: center;
+            background: #bbdefb;
+            font-weight: bold;
+            padding: 4px;
+            border: 1px solid #e0e0e0;
+            font-size: 0.7rem;
+        }
+        
+        /* Стили для недельного планировщика смен */
+        .scheduler-grid-container {
+            overflow-x: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #fff;
+        }
+        
+        .scheduler-grid {
+            min-width: 800px;
+        }
+        
+        .week-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .week-navigation h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .week-info {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .day-headers {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .time-column-header {
+            width: 80px;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+            border-right: 1px solid #dee2e6;
+            background: #e9ecef;
+        }
+        
+        .day-header {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-right: 1px solid #dee2e6;
+            background: #f8f9fa;
+        }
+        
+        .day-header.today {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .day-name {
+            font-size: 0.9rem;
+        }
+        
+        .scheduler-body {
+            display: flex;
+            position: relative;
+        }
+        
+        .time-column {
+            width: 80px;
+            background: #f5f5f5;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        .time-slot {
+            height: 30px;
+            padding: 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border-bottom: 1px solid #e0e0e0;
+            color: #666;
+        }
+        
+        .day-column {
+            flex: 1;
+            position: relative;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        .shift-container {
+            position: relative;
+            height: 720px; /* 24 часа * 30px */
+            background: 
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent 0px,
+                    transparent 29px,
+                    #e0e0e0 29px,
+                    #e0e0e0 30px
+                );
+        }
+        
+        .shift-block {
+            color: white;
+            padding: 3px 6px;
+            border-radius: 2px;
+            font-size: 0.55rem;
+            font-weight: bold;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        
+        .shift-block:hover {
+            opacity: 0.8;
+        }
+        
+        .shift-content {
+            line-height: 0.8;
+            text-align: center;
+        }
+        
+        .empty-slot {
+            cursor: pointer;
+        }
+        
+        .empty-slot:hover {
+            background: rgba(0, 123, 255, 0.1);
+        }
+        
+        .current-time-line {
+            background: #ff0000;
+            box-shadow: 0 0 4px rgba(255, 0, 0, 0.5);
+        }
+        
+        /* Стили для модального окна */
+        .modal {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-dialog {
+            margin: 1.75rem auto;
+        }
+        
+        .modal-content {
+            border-radius: 8px;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Адаптивность для планировщика */
+        @media (max-width: 768px) {
+            .week-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .week-navigation h2 {
+                font-size: 1.2rem;
+            }
+            
+            .scheduler-grid-container {
+                font-size: 0.7rem;
+            }
+            
+            .time-slot {
+                font-size: 0.6rem;
+            }
+            
+            .shift-block {
+                font-size: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -289,6 +907,129 @@
                 const response = await fetch(`/api/cities/${id}`, { method: 'DELETE' });
                 if (!response.ok) throw new Error('Ошибка удаления города');
                 return true;
+            },
+            
+            // Посещаемость
+            async getAttendance() {
+                const response = await fetch('/api/attendance');
+                if (!response.ok) throw new Error('Ошибка загрузки посещаемости');
+                return response.json();
+            },
+            async createAttendance(attendance) {
+                const response = await fetch('/api/attendance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(attendance)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка создания записи посещаемости');
+                }
+                return response.json();
+            },
+            async updateAttendance(id, attendance) {
+                const response = await fetch(`/api/attendance/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(attendance)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка обновления записи посещаемости');
+                }
+                return response.json();
+            },
+            async deleteAttendance(id) {
+                const response = await fetch(`/api/attendance/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Ошибка удаления записи посещаемости');
+                return true;
+            },
+            async getAttendanceByDate(date) {
+                const response = await fetch(`/api/attendance/date/${date}`);
+                if (!response.ok) throw new Error('Ошибка загрузки посещаемости по дате');
+                return response.json();
+            },
+            async getAttendanceByUserAndDateRange(userId, startDate, endDate) {
+                const response = await fetch(`/api/attendance/user/${userId}/range?startDate=${startDate}&endDate=${endDate}`);
+                if (!response.ok) throw new Error('Ошибка загрузки посещаемости по пользователю и диапазону дат');
+                return response.json();
+            },
+            
+            // Рабочие часы
+            async getWorkHours() {
+                const response = await fetch('/api/work-hours');
+                if (!response.ok) throw new Error('Ошибка загрузки рабочих часов');
+                return response.json();
+            },
+            async createWorkHours(workHours) {
+                const response = await fetch('/api/work-hours', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(workHours)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка создания записи рабочих часов');
+                }
+                return response.json();
+            },
+            async updateWorkHours(id, workHours) {
+                const response = await fetch(`/api/work-hours/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(workHours)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка обновления записи рабочих часов');
+                }
+                return response.json();
+            },
+            async deleteWorkHours(id) {
+                const response = await fetch(`/api/work-hours/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Ошибка удаления записи рабочих часов');
+                return true;
+            },
+            async getWorkHoursByDate(date) {
+                const response = await fetch(`/api/work-hours/date/${date}`);
+                if (!response.ok) throw new Error('Ошибка загрузки рабочих часов по дате');
+                return response.json();
+            },
+            async getWorkHoursByUserAndDateRange(userId, startDate, endDate) {
+                const response = await fetch(`/api/work-hours/user/${userId}/range?startDate=${startDate}&endDate=${endDate}`);
+                if (!response.ok) throw new Error('Ошибка загрузки рабочих часов по пользователю и диапазону дат');
+                return response.json();
+            },
+            async getTotalHoursByUserAndDateRange(userId, startDate, endDate) {
+                const response = await fetch(`/api/work-hours/user/${userId}/total-hours?startDate=${startDate}&endDate=${endDate}`);
+                if (!response.ok) throw new Error('Ошибка загрузки общих часов по пользователю и диапазону дат');
+                return response.json();
+            },
+            async getDayHoursByUserAndDateRange(userId, startDate, endDate) {
+                const response = await fetch(`/api/work-hours/user/${userId}/day-hours?startDate=${startDate}&endDate=${endDate}`);
+                if (!response.ok) throw new Error('Ошибка загрузки дневных часов по пользователю и диапазону дат');
+                return response.json();
+            },
+            async getNightHoursByUserAndDateRange(userId, startDate, endDate) {
+                const response = await fetch(`/api/work-hours/user/${userId}/night-hours?startDate=${startDate}&endDate=${endDate}`);
+                if (!response.ok) throw new Error('Ошибка загрузки ночных часов по пользователю и диапазону дат');
+                return response.json();
             }
         };
 
@@ -380,6 +1121,42 @@
                                 }}
                             >
                                 Города
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a 
+                                className={`nav-link ${activeSubTab === 'timesheet' ? 'active' : ''}`}
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onSubTabChange('timesheet');
+                                }}
+                            >
+                                График работы
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a 
+                                className={`nav-link ${activeSubTab === 'work-hours' ? 'active' : ''}`}
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onSubTabChange('work-hours');
+                                }}
+                            >
+                                Рабочие часы
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a 
+                                className={`nav-link ${activeSubTab === 'scheduler' ? 'active' : ''}`}
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onSubTabChange('scheduler');
+                                }}
+                            >
+                                Планировщик
                             </a>
                         </li>
                     </ul>
@@ -943,6 +1720,8 @@
             );
         }
 
+
+
         function ShiftForm({ shift, groups, onSave, onCancel }) {
             const [formData, setFormData] = useState({
                 name: shift?.name || '',
@@ -1045,6 +1824,9 @@
             const [groups, setGroups] = useState([]);
             const [shifts, setShifts] = useState([]);
             const [cities, setCities] = useState([]);
+            const [attendance, setAttendance] = useState([]);
+            const [workHours, setWorkHours] = useState([]);
+            const [currentDate, setCurrentDate] = useState(new Date());
             const [currentView, setCurrentView] = useState('list');
             const [currentUser, setCurrentUser] = useState(null);
             const [currentGroup, setCurrentGroup] = useState(null);
@@ -1312,11 +2094,11 @@
                 return (
                     <div>
                         <Header activeTab={activeTab} onTabChange={handleTabChange} />
-                        <div className="text-center mt-5">
-                            <div className="spinner-border text-primary" role="status">
-                                <span className="visually-hidden">Загрузка...</span>
-                            </div>
-                            <p className="mt-2">Загрузка пользователей...</p>
+                    <div className="text-center mt-5">
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Загрузка...</span>
+                        </div>
+                        <p className="mt-2">Загрузка пользователей...</p>
                         </div>
                     </div>
                 );
@@ -1331,14 +2113,14 @@
                         <div className="row">
                             <Sidebar activeSubTab={activeSubTab} onSubTabChange={handleSubTabChange} />
                             <div className="col-md-9 col-lg-10">
-                                {currentView === 'list' ? (
+                    {currentView === 'list' ? (
                                     activeSubTab === 'employees' ? (
-                                        <UserList
-                                            users={users}
-                                            onUserClick={handleUserClick}
-                                            onDeleteUser={handleDeleteUser}
-                                            onAddUser={handleAddUser}
-                                        />
+                        <UserList
+                            users={users}
+                            onUserClick={handleUserClick}
+                            onDeleteUser={handleDeleteUser}
+                            onAddUser={handleAddUser}
+                        />
                                     ) : activeSubTab === 'groups' ? (
                                         <GroupsList
                                             groups={groups}
@@ -1353,7 +2135,26 @@
                                             onDeleteCity={handleDeleteCity}
                                             onAddCity={handleAddCity}
                                         />
-                                    ) : (
+                                    ) : activeSubTab === 'timesheet' ? (
+                                        <TimesheetTable
+                                            users={users}
+                                            shifts={shifts}
+                                            groups={groups}
+                                        />
+                                    ) : activeSubTab === 'work-hours' ? (
+                                        <WorkHoursTable
+                                            users={users}
+                                            shifts={shifts}
+                                            groups={groups}
+                                            cities={cities}
+                                        />
+                                    ) : activeSubTab === 'scheduler' ? (
+                                        <WeeklyShiftScheduler
+                                            users={users}
+                                            shifts={shifts}
+                                            groups={groups}
+                        />
+                    ) : (
                                         <ShiftsList
                                             shifts={shifts}
                                             onShiftClick={handleShiftClick}
@@ -1362,13 +2163,13 @@
                                         />
                                     )
                                 ) : currentView === 'userForm' ? (
-                                    <UserForm
-                                        user={currentUser}
+                        <UserForm
+                            user={currentUser}
                                         groups={groups}
                                         cities={cities}
-                                        onSave={handleSaveUser}
-                                        onCancel={handleCancel}
-                                    />
+                            onSave={handleSaveUser}
+                            onCancel={handleCancel}
+                        />
                                 ) : currentView === 'groupForm' ? (
                                     <GroupForm
                                         group={currentGroup}
@@ -1388,8 +2189,8 @@
                                         shift={currentShift}
                                         groups={groups}
                                         onSave={handleSaveShift}
-                                        onCancel={handleCancel}
-                                    />
+                            onCancel={handleCancel}
+                        />
                                 )}
                             </div>
                         </div>
@@ -1401,6 +2202,1311 @@
                                 onDeleteUser={handleDeleteUser}
                                 onAddUser={handleAddUser}
                             />
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Новые компоненты для табеля, рабочих часов и планировщика
+        function TimesheetTable({ users, shifts, groups }) {
+            const [currentDate, setCurrentDate] = useState(new Date());
+            const [attendanceData, setAttendanceData] = useState({});
+            const [activeShift, setActiveShift] = useState(null);
+            const [selectedGroup, setSelectedGroup] = useState(null);
+            const [loading, setLoading] = useState(false);
+
+            // Получаем дни месяца
+            const getDaysInMonth = (date) => {
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const daysCount = new Date(year, month + 1, 0).getDate();
+                const days = [];
+
+                for (let day = 1; day <= daysCount; day++) {
+                    const dayDate = new Date(year, month, day);
+                    const dayOfWeek = dayDate.getDay();
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    
+                    days.push({
+                        date: day,
+                        fullDate: `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+                        dayOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'][dayOfWeek],
+                        isWeekend
+                    });
+                }
+                return days;
+            };
+
+            const daysInMonth = getDaysInMonth(currentDate);
+
+            // Загрузка данных посещаемости за месяц
+            useEffect(() => {
+                if (users.length > 0) {
+                    loadMonthAttendance();
+                }
+            }, [currentDate, users]);
+
+            const loadMonthAttendance = async () => {
+                setLoading(true);
+                try {
+                    const year = currentDate.getFullYear();
+                    const month = currentDate.getMonth() + 1;
+                    const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+                    const endDate = `${year}-${String(month).padStart(2, '0')}-${daysInMonth.length}`;
+                    
+                    const response = await fetch(`/api/attendance/range?startDate=${startDate}&endDate=${endDate}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // Организуем данные по пользователям и датам
+                        const attendanceMap = {};
+                        data.forEach(item => {
+                            const key = `${item.userId}-${item.date}`;
+                            attendanceMap[key] = item;
+                        });
+                        
+                        setAttendanceData(attendanceMap);
+                    }
+                } catch (error) {
+                    console.error('Ошибка загрузки данных посещаемости:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            // Группируем пользователей по группам
+            const getUsersByGroups = () => {
+                const groupedUsers = {};
+                groups.forEach(group => {
+                    groupedUsers[group.id] = users.filter(user => user.groupId === group.id);
+                });
+                return groupedUsers;
+            };
+
+            const usersByGroups = getUsersByGroups();
+
+            // Обработка клика по ячейке
+            const handleCellClick = async (userId, fullDate) => {
+                const user = users.find(u => u.id === userId);
+                if (!user || !activeShift) return;
+
+                if (Number(activeShift.group) !== user.groupId) return;
+
+                const key = `${userId}-${fullDate}`;
+                const currentAttendance = attendanceData[key];
+
+                try {
+                    if (activeShift.shift === 'clear') {
+                        // Удаляем смену
+                        if (currentAttendance && currentAttendance.id) {
+                            await fetch(`/api/attendance/${currentAttendance.id}`, {
+                                method: 'DELETE'
+                            });
+                        }
+                        setAttendanceData(prev => {
+                            const newData = { ...prev };
+                            delete newData[key];
+                            return newData;
+                        });
+                    } else {
+                        // Назначаем смену
+                        const attendanceRecord = {
+                            date: fullDate,
+                            userId: userId,
+                            userName: user.name,
+                            shiftId: activeShift.shiftId,
+                            isAbsent: false,
+                            notes: ''
+                        };
+
+                        let response;
+                        if (currentAttendance && currentAttendance.id) {
+                            // Обновляем существующую запись
+                            response = await fetch(`/api/attendance/${currentAttendance.id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ ...attendanceRecord, id: currentAttendance.id })
+                            });
+                        } else {
+                            // Создаем новую запись
+                            response = await fetch('/api/attendance', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(attendanceRecord)
+                            });
+                        }
+
+                        if (response.ok) {
+                            const savedRecord = await response.json();
+                            setAttendanceData(prev => ({
+                                ...prev,
+                                [key]: savedRecord
+                            }));
+                        }
+                    }
+                } catch (error) {
+                    console.error('Ошибка при обновлении посещаемости:', error);
+                }
+            };
+
+            // Получение данных посещаемости для ячейки
+            const getAttendanceForCell = (userId, fullDate) => {
+                const key = `${userId}-${fullDate}`;
+                return attendanceData[key];
+            };
+
+            // Рендер чипа смены
+            const renderShiftChip = (shiftId) => {
+                const shift = shifts.find(s => s.id === shiftId);
+                if (!shift) return null;
+
+                return (
+                    <span className="shift-badge" title={`${shift.startTime} - ${shift.endTime}`}>
+                        {shift.name}
+                    </span>
+                );
+            };
+
+            // Рендер палитры смен для группы
+            const renderShiftPalette = (groupId) => {
+                const groupShifts = shifts.filter(shift => 
+                    shift.groupNames && shift.groupNames.some(name => 
+                        groups.find(g => g.id === groupId)?.name === name
+                    )
+                );
+
+                const handleShiftClick = (shift) => {
+                    const isCurrentlyActive = activeShift && 
+                                           activeShift.group === groupId && 
+                                           activeShift.shiftId === shift.id;
+                    
+                    if (isCurrentlyActive) {
+                        setActiveShift(null);
+                    } else {
+                        setSelectedGroup(groupId);
+                        setActiveShift({
+                            group: groupId,
+                            shiftId: shift.id,
+                            shift: shift.name
+                        });
+                    }
+                };
+
+                const handleClearClick = () => {
+                    const isCurrentlyClearActive = activeShift && 
+                                                activeShift.group === groupId && 
+                                                activeShift.shift === 'clear';
+                    
+                    if (isCurrentlyClearActive) {
+                        setActiveShift(null);
+                    } else {
+                        setSelectedGroup(groupId);
+                        setActiveShift({
+                            group: groupId,
+                            shift: 'clear'
+                        });
+                    }
+                };
+
+                return (
+                    <div className="shift-palette">
+                        {groupShifts.map(shift => {
+                            const isActive = activeShift && 
+                                           activeShift.group === groupId && 
+                                           activeShift.shiftId === shift.id;
+                            
+                            return (
+                                <button
+                                    key={shift.id}
+                                    className={`btn btn-sm shift-btn ${isActive ? 'btn-primary' : 'btn-outline-primary'}`}
+                                    onClick={() => handleShiftClick(shift)}
+                                    title={`${shift.startTime} - ${shift.endTime}`}
+                                >
+                                    {shift.name}
+                                </button>
+                            );
+                        })}
+                        <button
+                            className={`btn btn-sm shift-btn ${activeShift && activeShift.group === groupId && activeShift.shift === 'clear' ? 'btn-danger' : 'btn-outline-danger'}`}
+                            onClick={handleClearClick}
+                            title="Удалить смену"
+                        >
+                            Очистить
+                        </button>
+                    </div>
+                );
+            };
+
+            // Рендер ячейки сотрудника
+            const renderEmployeeCell = (user, day) => {
+                const attendanceRecord = getAttendanceForCell(user.id, day.fullDate);
+                const isActiveGroup = activeShift && activeShift.group === user.groupId;
+                const canAssign = isActiveGroup && activeShift.shift !== 'clear';
+                const canClear = isActiveGroup && activeShift.shift === 'clear' && attendanceRecord;
+
+                return (
+                    <td 
+                        key={day.date}
+                        className={`employee-cell ${day.isWeekend ? 'weekend' : ''} ${canAssign || canClear ? 'assignable' : ''}`}
+                        onClick={() => handleCellClick(user.id, day.fullDate)}
+                        style={{ position: 'relative', cursor: isActiveGroup ? 'pointer' : 'default' }}
+                    >
+                        {attendanceRecord && attendanceRecord.shiftId && renderShiftChip(attendanceRecord.shiftId)}
+                        
+                        {canAssign && !attendanceRecord && (
+                            <div className="assignment-preview">
+                                {activeShift.shift}
+                            </div>
+                        )}
+                        
+                        {canClear && attendanceRecord && (
+                            <div className="clear-preview">
+                                ✕
+                            </div>
+                        )}
+                    </td>
+                );
+            };
+
+            const changeMonth = (delta) => {
+                setCurrentDate(prev => {
+                    const newDate = new Date(prev);
+                    newDate.setMonth(prev.getMonth() + delta);
+                    return newDate;
+                });
+            };
+
+            return (
+                <div className="timesheet-container">
+                    <div className="timesheet-header">
+                        <div className="month-navigation">
+                            <button className="btn btn-outline-secondary" onClick={() => changeMonth(-1)}>
+                                ‹ Предыдущий
+                            </button>
+                            <h2>
+                                График работы - {currentDate.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
+                            </h2>
+                            <button className="btn btn-outline-secondary" onClick={() => changeMonth(1)}>
+                                Следующий ›
+                            </button>
+                        </div>
+                    </div>
+
+                    {loading && (
+                        <div className="text-center my-3">
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="visually-hidden">Загрузка...</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="timesheet-table-container">
+                        <table className="table table-bordered timesheet-calendar">
+                            <thead>
+                                <tr>
+                                    <th className="employee-header">Сотрудник</th>
+                                    {daysInMonth.map(day => (
+                                        <th 
+                                            key={day.date}
+                                            className={`day-header ${day.isWeekend ? 'weekend' : ''}`}
+                                        >
+                                            <div className="day-number">{day.date}</div>
+                                            <div className="day-name">{day.dayOfWeek}</div>
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Object.entries(usersByGroups).map(([groupId, groupUsers]) => {
+                                    const group = groups.find(g => g.id === parseInt(groupId));
+                                    if (!group || groupUsers.length === 0) return null;
+
+                                    return (
+                                        <React.Fragment key={groupId}>
+                                            <tr className="group-header">
+                                                <td colSpan={daysInMonth.length + 1} className="group-header-cell">
+                                                    <div className="group-info">
+                                                        <h5>Группа: {group.name}</h5>
+                                                        {renderShiftPalette(parseInt(groupId))}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {groupUsers.map(user => (
+                                                <tr key={user.id} className="employee-row">
+                                                    <td className="employee-name" title={`Город: ${user.cityName || 'Не указан'}`}>
+                                                        {user.lastName} {user.firstName}
+                                                    </td>
+                                                    {daysInMonth.map(day => renderEmployeeCell(user, day))}
+                                                </tr>
+                                            ))}
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        }
+
+        function WorkHoursTable({ users, shifts, groups, cities }) {
+            console.log('WorkHoursTable: Полученные параметры:', {
+                users: users,
+                shifts: shifts,
+                groups: groups,
+                cities: cities
+            });
+            
+            // Отладочная информация для Савинкова
+            const savinkov = users.find(u => u.firstName === 'Савинков');
+            if (savinkov) {
+                console.log('WorkHoursTable: Найден Савинков:', savinkov);
+            }
+            
+            const [currentDate, setCurrentDate] = useState(new Date());
+            const [attendanceData, setAttendanceData] = useState({});
+            const [loading, setLoading] = useState(false);
+
+            // Получаем дни месяца
+            const getDaysInMonth = (date) => {
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const daysCount = new Date(year, month + 1, 0).getDate();
+                const days = [];
+
+                for (let day = 1; day <= daysCount; day++) {
+                    const dayDate = new Date(year, month, day);
+                    const dayOfWeek = dayDate.getDay();
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    
+                    days.push({
+                        date: day,
+                        fullDate: `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+                        dayOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'][dayOfWeek],
+                        isWeekend
+                    });
+                }
+                return days;
+            };
+
+            const daysInMonth = getDaysInMonth(currentDate);
+
+            // Загрузка данных посещаемости за месяц
+            useEffect(() => {
+                if (users.length > 0) {
+                    loadMonthAttendance();
+                }
+            }, [currentDate, users]);
+
+            const loadMonthAttendance = async () => {
+                setLoading(true);
+                try {
+                    const year = currentDate.getFullYear();
+                    const month = currentDate.getMonth() + 1;
+                    // Новый расчет предыдущего месяца
+                    const prevMonth = month === 1 ? 12 : month - 1;
+                    const prevYear = month === 1 ? year - 1 : year;
+                    const prevMonthLastDay = new Date(prevYear, prevMonth, 0).getDate();
+                    // Диапазон теперь с последнего дня предыдущего месяца
+                    const startDate = `${prevYear}-${String(prevMonth).padStart(2, '0')}-${prevMonthLastDay}`;
+                    const endDate = `${year}-${String(month).padStart(2, '0')}-${daysInMonth.length}`;
+                    
+                    const response = await fetch(`/api/attendance/range?startDate=${startDate}&endDate=${endDate}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // Организуем данные по пользователям и датам
+                        const attendanceMap = {};
+                        data.forEach(item => {
+                            const key = `${item.userId}-${item.date}`;
+                            attendanceMap[key] = item;
+                        });
+                        
+                        setAttendanceData(attendanceMap);
+                    }
+                } catch (error) {
+                    console.error('Ошибка загрузки данных посещаемости:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            // Группируем пользователей по группам
+            const getUsersByGroups = () => {
+                const groupedUsers = {};
+                groups.forEach(group => {
+                    groupedUsers[group.id] = users.filter(user => user.groupId === group.id);
+                });
+                return groupedUsers;
+            };
+
+            const usersByGroups = getUsersByGroups();
+
+            // Конвертация времени с учетом часового пояса
+            const convertTimeToEmployeeTimezone = (time, timeZone) => {
+                // Время в сменах указано по московскому времени (UTC+3)
+                // Конвертируем в локальное время сотрудника
+                const moscowOffset = 3; // UTC+3 (Москва)
+                
+                // Получаем часовой пояс из данных городов
+                const cityTimezone = cities.find(c => c.gmtTimezone === timeZone);
+                const employeeOffset = cityTimezone ? 
+                    parseInt(cityTimezone.gmtTimezone.substring(3)) : 3; // По умолчанию Москва
+                
+                const offsetDifference = employeeOffset - moscowOffset;
+                
+                const [hour, minute] = time.split(':').map(Number);
+                const adjustedHour = (hour + offsetDifference + 24) % 24;
+                
+
+                
+                return `${String(adjustedHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+            };
+
+            // Функция для расчета рабочих часов на основе смены (текущий день)
+            const calculateWorkHours = (user, day) => {
+                const key = `${user.id}-${day.fullDate}`;
+                const attendanceRecord = attendanceData[key];
+                
+
+                
+                // Отладочная информация
+                if (user.firstName === 'Савинков' && (day.date === 31 || day.date === 1)) {
+                    console.log('Савинков расчет часов:', {
+                        date: day.fullDate,
+                        key: key,
+                        attendanceRecord: attendanceRecord,
+                        shift: attendanceRecord ? shifts.find(s => s.id === attendanceRecord.shiftId) : null
+                    });
+                }
+                
+                if (!attendanceRecord || !attendanceRecord.shiftId) {
+                    return { dayHours: 0, nightHours: 0 };
+                }
+
+                const shift = shifts.find(s => s.id === attendanceRecord.shiftId);
+                if (!shift) {
+                    return { dayHours: 0, nightHours: 0 };
+                }
+
+                // Конвертируем время с учетом часового пояса сотрудника
+                const userTimezone = user.cityName ? 
+                    cities.find(c => c.id === user.cityId)?.gmtTimezone || 'GMT+3' : 'GMT+3';
+                const adjustedStartTime = convertTimeToEmployeeTimezone(shift.startTime, userTimezone);
+                const adjustedEndTime = convertTimeToEmployeeTimezone(shift.endTime, userTimezone);
+
+                // Парсим время начала и окончания смены
+                const [startHour, startMinute] = adjustedStartTime.split(':').map(Number);
+                const [endHour, endMinute] = adjustedEndTime.split(':').map(Number);
+                
+                let startHour24 = startHour;
+                let endHour24 = endHour;
+                
+                // Определяем границы дня и ночи (в часах)
+                const dayStart = 6; // 06:00
+                const dayEnd = 22; // 22:00
+
+                let dayHours = 0;
+                let nightHours = 0;
+
+                // Если смена переходит через полночь
+                const crossesMidnight = endHour24 < startHour24;
+                
+                // Отладочная информация для Савинкова
+                if (user.firstName === 'Савинков' && (day.date === 31 || day.date === 1)) {
+                    console.log('Савинков проверка смены через полночь:', {
+                        originalStartTime: shift.startTime,
+                        originalEndTime: shift.endTime,
+                        adjustedStartTime: adjustedStartTime,
+                        adjustedEndTime: adjustedEndTime,
+                        startHour24: startHour24,
+                        endHour24: endHour24,
+                        crossesMidnight: crossesMidnight
+                    });
+                }
+                
+                if (crossesMidnight) {
+                    // Часы текущего дня (с начала смены до полночи)
+                    for (let hour = startHour24; hour < 24; hour++) {
+                        if (hour >= dayStart && hour < dayEnd) {
+                            dayHours += 1;
+                        } else {
+                            nightHours += 1;
+                        }
+                    }
+
+                    // Часы следующего дня (с полуночи до конца смены)
+                    let nextDayHours = 0;
+                    let nextNightHours = 0;
+                    for (let hour = 0; hour < endHour24; hour++) {
+                        if (hour >= dayStart && hour < dayEnd) {
+                            nextDayHours += 1;
+                        } else {
+                            nextNightHours += 1;
+                        }
+                    }
+
+                    // Определяем, на какой день приходится большая часть смены
+                    const currentDayTotal = dayHours + nightHours;
+                    const nextDayTotal = nextDayHours + nextNightHours;
+
+                    // Если большая часть смены приходится на текущий день, вычитаем обед здесь
+                    if (currentDayTotal > nextDayTotal) {
+                        if (dayHours > nightHours) {
+                            dayHours = Math.max(0, dayHours - 1);
+                        } else if (nightHours > dayHours) {
+                            nightHours = Math.max(0, nightHours - 1);
+                        } else {
+                            dayHours = Math.max(0, dayHours - 1);
+                        }
+                    }
+
+                    return { dayHours, nightHours };
+                } else {
+                    // Обычная смена в пределах одного дня
+                    for (let hour = startHour24; hour < endHour24; hour++) {
+                        if (hour >= dayStart && hour < dayEnd) {
+                            dayHours += 1;
+                        } else {
+                            nightHours += 1;
+                        }
+                    }
+
+                    // Вычитаем обед (1 час из большего периода)
+                    if (dayHours > nightHours) {
+                        dayHours = Math.max(0, dayHours - 1);
+                    } else if (nightHours > dayHours) {
+                        nightHours = Math.max(0, nightHours - 1);
+                    } else {
+                        dayHours = Math.max(0, dayHours - 1);
+                    }
+
+                    return { dayHours, nightHours };
+                }
+            };
+
+            // Функция для расчета часов работы на следующий день (для смен через полночь)
+            const calculateNextDayHours = (user, day) => {
+                // Получаем предыдущий день
+                const previousDate = new Date(day.fullDate);
+                previousDate.setDate(previousDate.getDate() - 1);
+                const previousDateString = previousDate.toISOString().split('T')[0];
+                
+                // Ищем смену за предыдущий день
+                const key = `${user.id}-${previousDateString}`;
+                const attendanceRecord = attendanceData[key];
+                
+
+                
+                // Отладочная информация
+                if (user.firstName === 'Савинков' && day.date === 1) {
+                    console.log('Савинков 1 августа:', {
+                        previousDate: previousDateString,
+                        key: key,
+                        attendanceRecord: attendanceRecord,
+                        shift: attendanceRecord ? shifts.find(s => s.id === attendanceRecord.shiftId) : null
+                    });
+                }
+                
+                if (!attendanceRecord || !attendanceRecord.shiftId) {
+                    return { dayHours: 0, nightHours: 0 };
+                }
+
+                const shift = shifts.find(s => s.id === attendanceRecord.shiftId);
+                if (!shift) {
+                    return { dayHours: 0, nightHours: 0 };
+                }
+
+                // Конвертируем время с учетом часового пояса сотрудника
+                const userTimezone = user.cityName ? 
+                    cities.find(c => c.id === user.cityId)?.gmtTimezone || 'GMT+3' : 'GMT+3';
+                const adjustedStartTime = convertTimeToEmployeeTimezone(shift.startTime, userTimezone);
+                const adjustedEndTime = convertTimeToEmployeeTimezone(shift.endTime, userTimezone);
+
+                // Парсим время начала и окончания смены
+                const [startHour, startMinute] = adjustedStartTime.split(':').map(Number);
+                const [endHour, endMinute] = adjustedEndTime.split(':').map(Number);
+                
+                let startHour24 = startHour;
+                let endHour24 = endHour;
+                
+                // Если смена переходит на следующий день
+                const crossesMidnight = endHour24 < startHour24;
+                
+                // Отладочная информация для Савинкова
+                if (user.firstName === 'Савинков' && day.date === 1) {
+                    console.log('Савинков смена через полночь:', {
+                        startHour24: startHour24,
+                        endHour24: endHour24,
+                        crossesMidnight: crossesMidnight,
+                        adjustedStartTime: adjustedStartTime,
+                        adjustedEndTime: adjustedEndTime
+                    });
+                }
+                
+                if (!crossesMidnight) {
+                    return { dayHours: 0, nightHours: 0 };
+                }
+
+                // Определяем границы дня и ночи (в часах)
+                const dayStart = 6; // 06:00
+                const dayEnd = 22; // 22:00
+
+                // Часы следующего дня (с полуночи до конца смены)
+                let nextDayHours = 0;
+                let nextNightHours = 0;
+                for (let hour = 0; hour < endHour24; hour++) {
+                    if (hour >= dayStart && hour < dayEnd) {
+                        nextDayHours += 1;
+                    } else {
+                        nextNightHours += 1;
+                    }
+                }
+
+                // Часы текущего дня (с начала смены до полночи)
+                let currentDayHours = 0;
+                let currentNightHours = 0;
+                for (let hour = startHour24; hour < 24; hour++) {
+                    if (hour >= dayStart && hour < dayEnd) {
+                        currentDayHours += 1;
+                    } else {
+                        currentNightHours += 1;
+                    }
+                }
+
+                // Определяем, на какой день приходится большая часть смены
+                const currentDayTotal = currentDayHours + currentNightHours;
+                const nextDayTotal = nextDayHours + nextNightHours;
+
+                // Если большая часть смены приходится на следующий день, вычитаем обед здесь
+                if (nextDayTotal > currentDayTotal) {
+                    if (nextDayHours > nextNightHours) {
+                        nextDayHours = Math.max(0, nextDayHours - 1);
+                    } else if (nextNightHours > nextDayHours) {
+                        nextNightHours = Math.max(0, nextNightHours - 1);
+                    } else {
+                        nextDayHours = Math.max(0, nextDayHours - 1);
+                    }
+                }
+
+                return { dayHours: nextDayHours, nightHours: nextNightHours };
+            };
+
+            // Рендер заголовка дня
+            const renderDayHeader = (day) => (
+                <div>
+                    <div className="day-number">{day.date}</div>
+                    <div className="day-name">{day.dayOfWeek}</div>
+                </div>
+            );
+
+            // Рендер строки сотрудника
+            const renderEmployeeRow = (user) => {
+                // Отладочная информация для всех пользователей
+                console.log('renderEmployeeRow вызвана для:', {
+                    userId: user.id,
+                    lastName: user.lastName,
+                    firstName: user.firstName,
+                    cityName: user.cityName
+                });
+                
+
+                
+                let totalDayHours = 0;
+                let totalNightHours = 0;
+
+                return (
+                    <tr key={user.id} className="employee-row">
+                        <td className="employee-name" title={`Часовой пояс: ${user.cityName || 'Не указан'}`}>
+                            <div>
+                                <strong>{user.lastName} {user.firstName}</strong>
+                                <div className="employee-timezone">{user.cityName || 'Не указан'}</div>
+                            </div>
+                        </td>
+                        {daysInMonth.map(day => {
+                            const hours = calculateWorkHours(user, day);
+                            const nextDayHours = calculateNextDayHours(user, day);
+                            const totalDayHoursForDay = hours.dayHours + nextDayHours.dayHours;
+                            const totalNightHoursForDay = hours.nightHours + nextDayHours.nightHours;
+                            
+
+                            
+                            // Отладочная информация для Савинкова
+                            if (user.firstName === 'Савинков' && day.date === 1) {
+                                console.log('Савинков итоговый расчет 1 августа:', {
+                                    hours: hours,
+                                    nextDayHours: nextDayHours,
+                                    totalDayHoursForDay: totalDayHoursForDay,
+                                    totalNightHoursForDay: totalNightHoursForDay
+                                });
+                            }
+                            
+                            totalDayHours += totalDayHoursForDay;
+                            totalNightHours += totalNightHoursForDay;
+                            
+                            return (
+                                <td 
+                                    key={day.date}
+                                    className={`work-hours-cell ${day.isWeekend ? 'weekend' : ''}`}
+                                >
+                                    {totalDayHoursForDay > 0 || totalNightHoursForDay > 0 ? (
+                                        <div className="hours-display">
+                                            <div className="day-hours">Д: {totalDayHoursForDay}</div>
+                                            <div className="night-hours">Н: {totalNightHoursForDay}</div>
+                                        </div>
+                                    ) : (
+                                        <span className="no-hours">-</span>
+                                    )}
+                                </td>
+                            );
+                        })}
+                        <td className="total-month-cell">
+                            <div className="hours-display">
+                                <div className="day-hours">Д: {Math.round(totalDayHours * 100) / 100}</div>
+                                <div className="night-hours">Н: {Math.round(totalNightHours * 100) / 100}</div>
+                            </div>
+                        </td>
+                        <td className="total-hours-cell">
+                            {Math.round((totalDayHours + totalNightHours) * 100) / 100}
+                        </td>
+                    </tr>
+                );
+            };
+
+            const changeMonth = (delta) => {
+                setCurrentDate(prev => {
+                    const newDate = new Date(prev);
+                    newDate.setMonth(prev.getMonth() + delta);
+                    return newDate;
+                });
+            };
+
+            return (
+                <div className="work-hours-container">
+                    <div className="work-hours-header">
+                        <div className="month-navigation">
+                            <button className="btn btn-outline-secondary" onClick={() => changeMonth(-1)}>
+                                ‹ Предыдущий
+                            </button>
+                            <h2>
+                                Расчет рабочих часов - {currentDate.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
+                            </h2>
+                            <button className="btn btn-outline-secondary" onClick={() => changeMonth(1)}>
+                                Следующий ›
+                            </button>
+                        </div>
+                    </div>
+
+                    {loading && (
+                        <div className="text-center my-3">
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="visually-hidden">Загрузка...</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="work-hours-table-container">
+                        <table className="table table-bordered work-hours-calendar">
+                            <thead>
+                                <tr>
+                                    <th className="employee-header">Сотрудник</th>
+                                    {daysInMonth.map(day => (
+                                        <th 
+                                            key={day.date}
+                                            className={`day-header ${day.isWeekend ? 'weekend' : ''}`}
+                                        >
+                                            {renderDayHeader(day)}
+                                        </th>
+                                    ))}
+                                    <th className="total-month-header">Итого за месяц</th>
+                                    <th className="total-hours-header">Всего</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Object.entries(usersByGroups).map(([groupId, groupUsers]) => {
+                                    const group = groups.find(g => g.id === parseInt(groupId));
+                                    if (!group || groupUsers.length === 0) return null;
+
+                                    return (
+                                        <React.Fragment key={groupId}>
+                                            <tr className="group-header">
+                                                <td colSpan={daysInMonth.length + 3} className="group-header-cell">
+                                                    <h5>Группа: {group.name}</h5>
+                                                </td>
+                                            </tr>
+                                            {groupUsers.map(user => renderEmployeeRow(user))}
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        }
+
+        function WeeklyShiftScheduler({ users, shifts, groups }) {
+            const [currentDate, setCurrentDate] = useState(new Date());
+            const [attendanceData, setAttendanceData] = useState({});
+            const [loading, setLoading] = useState(false);
+            const [selectedSlot, setSelectedSlot] = useState(null);
+            const [dialogOpen, setDialogOpen] = useState(false);
+            const [selectedEmployee, setSelectedEmployee] = useState(null);
+            const [selectedShift, setSelectedShift] = useState('');
+
+            // Получаем дни недели
+            const getWeekDates = (date) => {
+                const startOfWeek = new Date(date);
+                const day = startOfWeek.getDay();
+                const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
+                startOfWeek.setDate(diff);
+                
+                const week = [];
+                for (let i = 0; i < 7; i++) {
+                    const currentDate = new Date(startOfWeek);
+                    currentDate.setDate(startOfWeek.getDate() + i);
+                    week.push(currentDate);
+                }
+                return week;
+            };
+
+            const weekDates = getWeekDates(currentDate);
+
+            // Массив часов (0-23)
+            const hours = Array.from({ length: 24 }, (_, i) => i);
+
+            // Загрузка данных посещаемости за неделю
+            useEffect(() => {
+                if (users.length > 0) {
+                    loadWeekAttendance();
+                }
+            }, [currentDate, users]);
+
+            const loadWeekAttendance = async () => {
+                setLoading(true);
+                try {
+                    const startDate = weekDates[0].toISOString().split('T')[0];
+                    const endDate = weekDates[6].toISOString().split('T')[0];
+                    
+                    const response = await fetch(`/api/attendance/range?startDate=${startDate}&endDate=${endDate}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // Организуем данные по пользователям и датам
+                        const attendanceMap = {};
+                        data.forEach(item => {
+                            const key = `${item.userId}-${item.date}`;
+                            attendanceMap[key] = item;
+                        });
+                        
+                        setAttendanceData(attendanceMap);
+                    }
+                } catch (error) {
+                    console.error('Ошибка загрузки данных посещаемости:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            // Форматирование времени
+            const formatTime = (hour) => {
+                return `${hour.toString().padStart(2, '0')}:00`;
+            };
+
+            // Форматирование даты
+            const formatDate = (date) => {
+                return date.toLocaleDateString('ru-RU', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            };
+
+            // Проверка, является ли день сегодняшним
+            const isToday = (date) => {
+                const today = new Date();
+                return date.toDateString() === today.toDateString();
+            };
+
+            // Проверка, является ли неделя текущей
+            const isCurrentWeek = () => {
+                const today = new Date();
+                const weekStart = weekDates[0];
+                const weekEnd = weekDates[6];
+                return today >= weekStart && today <= weekEnd;
+            };
+
+            // Получение текущей позиции времени
+            const getCurrentTimePosition = () => {
+                const now = new Date();
+                return now.getHours() + now.getMinutes() / 60;
+            };
+
+            // Получение смен для дня
+            const getShiftsForDay = (date) => {
+                const dateString = date.toISOString().split('T')[0];
+                const dayShifts = [];
+                
+                users.forEach(user => {
+                    const key = `${user.id}-${dateString}`;
+                    const attendanceRecord = attendanceData[key];
+                    
+                    if (!attendanceRecord || !attendanceRecord.shiftId) return;
+
+                    const shift = shifts.find(s => s.id === attendanceRecord.shiftId);
+                    if (!shift) return;
+
+                    dayShifts.push({ user, shift });
+                });
+
+                // Также проверяем смены предыдущего дня, которые могут переходить на текущий день
+                const previousDate = new Date(date);
+                previousDate.setDate(date.getDate() - 1);
+                const previousDateString = previousDate.toISOString().split('T')[0];
+                
+                users.forEach(user => {
+                    const key = `${user.id}-${previousDateString}`;
+                    const attendanceRecord = attendanceData[key];
+                    
+                    if (!attendanceRecord || !attendanceRecord.shiftId) return;
+
+                    const shift = shifts.find(s => s.id === attendanceRecord.shiftId);
+                    if (!shift) return;
+
+                    // Проверяем, переходит ли смена на текущий день
+                    const [startHour] = shift.startTime.split(':').map(Number);
+                    const [endHour] = shift.endTime.split(':').map(Number);
+                    
+                    if (endHour <= startHour) {
+                        // Смена переходит через полночь
+                        dayShifts.push({ user, shift, isOvernight: true });
+                    }
+                });
+                
+                return dayShifts;
+            };
+
+            // Получение позиции смены
+            const getShiftPosition = (shift, isOvernight = false) => {
+                const [startHour, startMinute] = shift.startTime.split(':').map(Number);
+                const [endHour, endMinute] = shift.endTime.split(':').map(Number);
+                
+                const startTime = startHour + startMinute / 60;
+                const endTime = endHour + endMinute / 60;
+                
+                if (isOvernight) {
+                    // Для смен, переходящих с предыдущего дня
+                    return {
+                        start: 0,
+                        end: endTime,
+                        height: endTime
+                    };
+                } else if (endTime > startTime) {
+                    // Обычная смена в пределах одного дня
+                    return {
+                        start: startTime,
+                        end: endTime,
+                        height: endTime - startTime
+                    };
+                } else {
+                    // Смена переходит на следующий день
+                    return {
+                        start: startTime,
+                        end: 24,
+                        height: 24 - startTime
+                    };
+                }
+            };
+
+            // Получение пересекающихся смен
+            const getOverlappingShifts = (shifts, targetShift, isOvernight = false) => {
+                const targetPosition = getShiftPosition(targetShift, isOvernight);
+                return shifts.filter(({ shift, isOvernight: shiftIsOvernight }) => {
+                    const position = getShiftPosition(shift, shiftIsOvernight);
+                    // Проверяем пересечение по времени
+                    return !(targetPosition.end <= position.start || position.end <= targetPosition.start);
+                });
+            };
+
+            // Получение цвета смены
+            const getShiftColor = (shift, user) => {
+                // Цветовая схема по группам и сменам
+                const colors = {
+                    1: ['#2196f3', '#1976d2', '#0d47a1'], // Синие тона для группы 1
+                    2: ['#4caf50', '#388e3c', '#1b5e20']  // Зеленые тона для группы 2
+                };
+                
+                const groupColors = colors[user.groupId] || ['#9e9e9e', '#616161', '#424242'];
+                const shiftIndex = shifts.findIndex(s => s.id === shift.id) % groupColors.length;
+                return groupColors[shiftIndex];
+            };
+
+            // Обработка клика по слоту
+            const handleSlotClick = (date, hour) => {
+                setSelectedSlot({ date, hour });
+                setDialogOpen(true);
+            };
+
+            // Добавление смены
+            const handleAddShift = async () => {
+                if (!selectedEmployee || !selectedShift) return;
+
+                const fullDate = selectedSlot.date.toISOString().split('T')[0];
+                
+                try {
+                    const attendanceRecord = {
+                        date: fullDate,
+                        userId: selectedEmployee.id,
+                        userName: selectedEmployee.name,
+                        shiftId: parseInt(selectedShift),
+                        isAbsent: false,
+                        notes: ''
+                    };
+
+                    const response = await fetch('/api/attendance', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(attendanceRecord)
+                    });
+
+                    if (response.ok) {
+                        await loadWeekAttendance();
+                    }
+                } catch (error) {
+                    console.error('Ошибка добавления смены:', error);
+                }
+
+                setDialogOpen(false);
+                setSelectedEmployee(null);
+                setSelectedSlot(null);
+                setSelectedShift('');
+            };
+
+            // Навигация по неделям
+            const handlePreviousWeek = () => {
+                setCurrentDate(prev => {
+                    const newDate = new Date(prev);
+                    newDate.setDate(prev.getDate() - 7);
+                    return newDate;
+                });
+            };
+
+            const handleNextWeek = () => {
+                setCurrentDate(prev => {
+                    const newDate = new Date(prev);
+                    newDate.setDate(prev.getDate() + 7);
+                    return newDate;
+                });
+            };
+
+            // Фильтрация смен для сотрудника
+            const getShiftsForEmployee = (employeeId) => {
+                const user = users.find(u => u.id === employeeId);
+                if (!user) return [];
+                
+                return shifts.filter(shift => 
+                    shift.groupNames && shift.groupNames.some(name => 
+                        groups.find(g => g.id === user.groupId)?.name === name
+                    )
+                );
+            };
+
+            return (
+                <div className="weekly-scheduler-container">
+                    <div className="scheduler-header">
+                        <div className="week-navigation">
+                            <button className="btn btn-outline-secondary" onClick={handlePreviousWeek}>
+                                ‹ Предыдущая неделя
+                            </button>
+                            <h2>
+                                Недельный планировщик смен
+                            </h2>
+                            <button className="btn btn-outline-secondary" onClick={handleNextWeek}>
+                                Следующая неделя ›
+                            </button>
+                        </div>
+                        <div className="week-info">
+                            {weekDates[0].toLocaleDateString('ru-RU')} - {weekDates[6].toLocaleDateString('ru-RU')}
+                        </div>
+                    </div>
+
+                    {loading && (
+                        <div className="text-center my-3">
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="visually-hidden">Загрузка...</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="scheduler-grid-container">
+                        <div className="scheduler-grid">
+                            {/* Заголовки дней недели */}
+                            <div className="day-headers">
+                                <div className="time-column-header">Время</div>
+                                {weekDates.map(date => (
+                                    <div key={date.toISOString()} className={`day-header ${isToday(date) ? 'today' : ''}`}>
+                                        <div className="day-name">{formatDate(date)}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Сетка времени и смен */}
+                            <div className="scheduler-body">
+                                {/* Колонка времени */}
+                                <div className="time-column">
+                                    {hours.map(hour => (
+                                        <div key={hour} className="time-slot">
+                                            {formatTime(hour)}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Колонки дней */}
+                                {weekDates.map(date => (
+                                    <div key={date.toISOString()} className="day-column">
+                                        <div className="shift-container">
+                                            {getShiftsForDay(date).map(({ user, shift, isOvernight }, index) => {
+                                                const { start, end, height } = getShiftPosition(shift, isOvernight);
+                                                const overlappingShifts = getOverlappingShifts(getShiftsForDay(date), shift, isOvernight);
+                                                const shiftIndex = overlappingShifts.findIndex(s => s.user.id === user.id && s.shift.id === shift.id);
+                                                const totalOverlapping = overlappingShifts.length;
+                                                
+                                                return (
+                                                    <div
+                                                        key={`${user.id}-${shift.id}`}
+                                                        className="shift-block"
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: `${start * 30 + 1}px`,
+                                                            left: `calc(${shiftIndex} * (100% / ${totalOverlapping}) + 1px)`,
+                                                            width: `calc(100% / ${totalOverlapping} - 2px)`,
+                                                            height: `${height * 30 - 2}px`,
+                                                            backgroundColor: getShiftColor(shift, user),
+                                                            zIndex: 5
+                                                        }}
+                                                        title={`${user.lastName} ${user.firstName} - ${shift.name}: ${shift.startTime}-${shift.endTime}`}
+                                                        onClick={() => handleSlotClick(date, start)}
+                                                    >
+                                                        <div className="shift-content">
+                                                            {user.lastName.length > 8 ? 
+                                                                user.lastName.substring(0, 8) + '...' : 
+                                                                user.lastName}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                            
+                                            {/* Линия текущего времени */}
+                                            {isCurrentWeek() && isToday(date) && (
+                                                <div
+                                                    className="current-time-line"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: `${getCurrentTimePosition() * 30}px`,
+                                                        left: 0,
+                                                        right: 0,
+                                                        height: '2px',
+                                                        backgroundColor: '#ff0000',
+                                                        zIndex: 10,
+                                                        boxShadow: '0 0 4px rgba(255, 0, 0, 0.5)'
+                                                    }}
+                                                />
+                                            )}
+
+                                            {/* Клик по пустым слотам */}
+                                            {hours.map(hour => (
+                                                <div
+                                                    key={hour}
+                                                    className="empty-slot"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: `${hour * 30}px`,
+                                                        left: 0,
+                                                        right: 0,
+                                                        height: '30px',
+                                                        zIndex: 1
+                                                    }}
+                                                    onClick={() => handleSlotClick(date, hour)}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Диалог добавления смены */}
+                    {dialogOpen && (
+                        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
+                            <div className="modal-dialog">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">Добавить смену</h5>
+                                        <button type="button" className="btn-close" onClick={() => setDialogOpen(false)}></button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <div className="mb-3">
+                                            <strong>Дата:</strong> {selectedSlot?.date.toLocaleDateString('ru-RU')}
+                                        </div>
+                                        <div className="mb-3">
+                                            <strong>Время:</strong> {formatTime(selectedSlot?.hour || 0)}
+                                        </div>
+                                        
+                                        <div className="mb-3">
+                                            <label className="form-label">Выберите сотрудника</label>
+                                            <select 
+                                                className="form-control"
+                                                value={selectedEmployee ? selectedEmployee.id : ''}
+                                                onChange={(e) => {
+                                                    const employee = users.find(u => u.id === parseInt(e.target.value));
+                                                    setSelectedEmployee(employee);
+                                                    setSelectedShift(''); // Сбрасываем выбранную смену
+                                                }}
+                                            >
+                                                <option value="">Выберите сотрудника</option>
+                                                {users.map(user => (
+                                                    <option key={user.id} value={user.id}>
+                                                        {user.lastName} {user.firstName} (Группа: {groups.find(g => g.id === user.groupId)?.name})
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        
+                                        {selectedEmployee && (
+                                            <div className="mb-3">
+                                                <label className="form-label">Выберите смену</label>
+                                                <select 
+                                                    className="form-control"
+                                                    value={selectedShift}
+                                                    onChange={(e) => setSelectedShift(e.target.value)}
+                                                >
+                                                    <option value="">Выберите смену</option>
+                                                    {getShiftsForEmployee(selectedEmployee.id).map(shift => (
+                                                        <option key={shift.id} value={shift.id}>
+                                                            {shift.name} ({shift.startTime} - {shift.endTime})
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" onClick={() => setDialogOpen(false)}>
+                                            Отмена
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            className="btn btn-primary" 
+                                            onClick={handleAddShift}
+                                            disabled={!selectedEmployee || !selectedShift}
+                                        >
+                                            Добавить смену
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>

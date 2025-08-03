@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест API часовых поясов</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .button { 
+            background-color: #007bff; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin: 10px 0; 
+        }
+        .button:hover { background-color: #0056b3; }
+        .result { 
+            margin: 10px 0; 
+            padding: 10px; 
+            border-radius: 5px; 
+            white-space: pre-wrap; 
+        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>Тест API часовых поясов</h1>
+    
+    <button class="button" onclick="testTimezones()">
+        Получить часовые пояса городов
+    </button>
+    
+    <button class="button" onclick="testCities()">
+        Получить все города
+    </button>
+    
+    <button class="button" onclick="testConversion()">
+        Тест конвертации времени
+    </button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function testTimezones() {
+            try {
+                const response = await fetch('http://localhost:8081/api/cities/timezones', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                showResult(result, response.ok, 'info');
+            } catch (error) {
+                showResult({ message: 'Ошибка: ' + error.message }, false, 'error');
+            }
+        }
+        
+        async function testCities() {
+            try {
+                const response = await fetch('http://localhost:8081/api/cities', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                showResult(result, response.ok, 'info');
+            } catch (error) {
+                showResult({ message: 'Ошибка: ' + error.message }, false, 'error');
+            }
+        }
+        
+        async function testConversion() {
+            try {
+                // Сначала получаем города
+                const citiesResponse = await fetch('http://localhost:8081/api/cities', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const cities = await citiesResponse.json();
+                
+                // Тестируем конвертацию времени для разных городов
+                const testResults = [];
+                
+                for (const city of cities) {
+                    const timezone = city.gmtTimezone;
+                    if (timezone) {
+                        const offset = parseInt(timezone.substring(3));
+                        const moscowOffset = 3;
+                        const offsetDifference = offset - moscowOffset;
+                        
+                        // Тестируем смену 13:00-01:00
+                        const startTime = '13:00';
+                        const endTime = '01:00';
+                        
+                        const [startHour, startMinute] = startTime.split(':').map(Number);
+                        const [endHour, endMinute] = endTime.split(':').map(Number);
+                        
+                        const adjustedStartHour = (startHour + offsetDifference + 24) % 24;
+                        const adjustedEndHour = (endHour + offsetDifference + 24) % 24;
+                        
+                        const adjustedStartTime = `${String(adjustedStartHour).padStart(2, '0')}:${String(startMinute).padStart(2, '0')}`;
+                        const adjustedEndTime = `${String(adjustedEndHour).padStart(2, '0')}:${String(endMinute).padStart(2, '0')}`;
+                        
+                        testResults.push({
+                            city: city.name,
+                            timezone: timezone,
+                            originalStart: startTime,
+                            originalEnd: endTime,
+                            adjustedStart: adjustedStartTime,
+                            adjustedEnd: adjustedEndTime,
+                            offsetDifference: offsetDifference
+                        });
+                    }
+                }
+                
+                showResult(testResults, true, 'success');
+            } catch (error) {
+                showResult({ message: 'Ошибка: ' + error.message }, false, 'error');
+            }
+        }
+        
+        function showResult(data, isSuccess, type = 'success') {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result ' + (isSuccess ? type : 'error');
+            resultDiv.textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html> 

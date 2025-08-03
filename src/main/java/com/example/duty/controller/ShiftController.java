@@ -38,9 +38,15 @@ public class ShiftController {
     
     @PutMapping("/{id}")
     public ResponseEntity<ShiftDto> updateShift(@PathVariable Long id, @Valid @RequestBody ShiftDto shiftDto) {
-        Optional<ShiftDto> updatedShift = shiftService.updateShift(id, shiftDto);
-        return updatedShift.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            Optional<ShiftDto> updatedShift = shiftService.updateShift(id, shiftDto);
+            return updatedShift.map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            System.err.println("Error updating shift with id " + id + ": " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
     
     @DeleteMapping("/{id}")
