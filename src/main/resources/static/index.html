@@ -188,6 +188,64 @@
                 if (!response.ok) throw new Error('Ошибка загрузки смен');
                 return response.json();
             },
+            async createShift(shift) {
+                const response = await fetch('/api/shifts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(shift)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка создания смены');
+                }
+                return response.json();
+            },
+            async updateShift(id, shift) {
+                const response = await fetch(`/api/shifts/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(shift)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка обновления смены');
+                }
+                return response.json();
+            },
+            async deleteShift(id) {
+                const response = await fetch(`/api/shifts/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Ошибка удаления смены');
+                return true;
+            },
+            async updateShift(id, shift) {
+                const response = await fetch(`/api/shifts/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(shift)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка обновления смены');
+                }
+                return response.json();
+            },
+            async deleteShift(id) {
+                const response = await fetch(`/api/shifts/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Ошибка удаления смены');
+                return true;
+            },
             
             // Города
             async getCities() {
@@ -230,45 +288,6 @@
             async deleteCity(id) {
                 const response = await fetch(`/api/cities/${id}`, { method: 'DELETE' });
                 if (!response.ok) throw new Error('Ошибка удаления города');
-                return true;
-            },
-            
-            // Смены
-            async getShifts() {
-                const response = await fetch('/api/shifts', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(shift)
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    if (errorData && typeof errorData === 'object') {
-                        const errorMessages = Object.values(errorData).join(', ');
-                        throw new Error(`Ошибка валидации: ${errorMessages}`);
-                    }
-                    throw new Error('Ошибка создания смены');
-                }
-                return response.json();
-            },
-            async updateShift(id, shift) {
-                const response = await fetch(`/api/shifts/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(shift)
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    if (errorData && typeof errorData === 'object') {
-                        const errorMessages = Object.values(errorData).join(', ');
-                        throw new Error(`Ошибка валидации: ${errorMessages}`);
-                    }
-                    throw new Error('Ошибка обновления смены');
-                }
-                return response.json();
-            },
-            async deleteShift(id) {
-                const response = await fetch(`/api/shifts/${id}`, { method: 'DELETE' });
-                if (!response.ok) throw new Error('Ошибка удаления смены');
                 return true;
             }
         };
