@@ -2,11 +2,14 @@ package com.example.duty.service;
 
 import com.example.duty.dto.UserDto;
 import com.example.duty.model.User;
+import com.example.duty.model.Group;
+import com.example.duty.model.City;
 import com.example.duty.repository.UserRepository;
+import com.example.duty.repository.GroupRepository;
+import com.example.duty.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,83 +18,117 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
     
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private GroupRepository groupRepository;
     
-    // Получить всех пользователей
+    @Autowired
+    private CityRepository cityRepository;
+    
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
     
-    // Получить пользователя по ID
     public Optional<UserDto> getUserById(Long id) {
         return userRepository.findById(id)
                 .map(this::convertToDto);
     }
     
-    // Создать нового пользователя
     public UserDto createUser(UserDto userDto) {
-        User user = convertToEntity(userDto);
-        User savedUser = userRepository.save(user);
-        return convertToDto(savedUser);
-    }
-    
-    // Обновить пользователя
-    public Optional<UserDto> updateUser(Long id, UserDto userDto) {
-        return userRepository.findById(id)
-                .map(existingUser -> {
-                    existingUser.setFirstName(userDto.getFirstName());
-                    existingUser.setLastName(userDto.getLastName());
-                    existingUser.setMiddleName(userDto.getMiddleName());
-                    existingUser.setBirthDate(userDto.getBirthDate());
-                    existingUser.setPosition(userDto.getPosition());
-                    return convertToDto(userRepository.save(existingUser));
-                });
-    }
-    
-    // Удалить пользователя
-    public boolean deleteUser(Long id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-    
-    // Поиск пользователей
-    public List<UserDto> searchUsers(String searchTerm) {
-        return userRepository.searchUsers(searchTerm).stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-    
-    // Конвертация Entity в DTO
-    private UserDto convertToDto(User user) {
-        return new UserDto(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getMiddleName(),
-                user.getBirthDate(),
-                user.getPosition()
-        );
-    }
-    
-    // Конвертация DTO в Entity
-    private User convertToEntity(UserDto userDto) {
         User user = new User();
-        user.setId(userDto.getId());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setMiddleName(userDto.getMiddleName());
         user.setBirthDate(userDto.getBirthDate());
         user.setPosition(userDto.getPosition());
-        return user;
+        
+        // Устанавливаем группу, если указана
+        if (userDto.getGroupId() != null) {
+            Group group = groupRepository.findById(userDto.getGroupId())
+                    .orElseThrow(() -> new RuntimeException("Группа не найдена"));
+            user.setGroup(group);
+        }
+        
+        if (userDto.getCityId() != null) {
+            City city = cityRepository.findById(userDto.getCityId())
+                    .orElseThrow(() -> new RuntimeException("Город не найден"));
+            user.setCity(city);
+        }
+        
+        User savedUser = userRepository.save(user);
+        return convertToDto(savedUser);
+    }
+    
+    public Optional<UserDto> updateUser(Long id, UserDto userDto) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setFirstName(userDto.getFirstName());
+                    user.setLastName(userDto.getLastName());
+                    user.setMiddleName(userDto.getMiddleName());
+                    user.setBirthDate(userDto.getBirthDate());
+                    user.setPosition(userDto.getPosition());
+                    
+                    // Обновляем группу
+                    if (userDto.getGroupId() != null) {
+                        Group group = groupRepository.findById(userDto.getGroupId())
+                                .orElseThrow(() -> new RuntimeException("Группа не найдена"));
+                        user.setGroup(group);
+                    } else {
+                        user.setGroup(null);
+                    }
+                    
+                    // Обновляем город
+                    if (userDto.getCityId() != null) {
+                        City city = cityRepository.findById(userDto.getCityId())
+                                .orElseThrow(() -> new RuntimeException("Город не найден"));
+                        user.setCity(city);
+                    } else {
+                        user.setCity(null);
+                    }
+                    
+                    User savedUser = userRepository.save(user);
+                    return convertToDto(savedUser);
+                });
+    }
+    
+    public boolean deleteUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+            return true;
+        }
+        return false;
+    }
+    
+    public List<UserDto> searchUsers(String query) {
+        return userRepository.searchUsers(query).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+    
+    private UserDto convertToDto(User user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setMiddleName(user.getMiddleName());
+        dto.setBirthDate(user.getBirthDate());
+        dto.setPosition(user.getPosition());
+        
+        if (user.getGroup() != null) {
+            dto.setGroupId(user.getGroup().getId());
+            dto.setGroupName(user.getGroup().getName());
+        }
+        
+        if (user.getCity() != null) {
+            dto.setCityId(user.getCity().getId());
+            dto.setCityName(user.getCity().getName());
+        }
+        
+        return dto;
     }
 } 

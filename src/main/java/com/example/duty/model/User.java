@@ -34,6 +34,14 @@ public class User {
     @Column(name = "position", nullable = false)
     private String position;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Group group;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id")
+    private City city;
+    
     // Конструкторы
     public User() {}
     
@@ -94,6 +102,22 @@ public class User {
         this.position = position;
     }
     
+    public Group getGroup() {
+        return group;
+    }
+    
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+    
+    public City getCity() {
+        return city;
+    }
+    
+    public void setCity(City city) {
+        this.city = city;
+    }
+    
     @Override
     public String toString() {
         return "User{" +
@@ -103,6 +127,7 @@ public class User {
                 ", middleName='" + middleName + '\'' +
                 ", birthDate=" + birthDate +
                 ", position='" + position + '\'' +
+                ", group=" + (group != null ? group.getName() : "null") +
                 '}';
     }
 } 

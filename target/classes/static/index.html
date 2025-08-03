@@ -12,6 +12,79 @@
         .user-card { transition: transform 0.2s; cursor: pointer; }
         .user-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .form-container { max-width: 600px; margin: 0 auto; }
+        
+        /* Стили для шапки */
+        .navbar-custom {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 600;
+            color: #495057 !important;
+            font-size: 1.25rem;
+        }
+        
+        .navbar-nav .nav-link {
+            color: #6c757d !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: #495057 !important;
+        }
+        
+        .navbar-nav .nav-link.active {
+            color: #0d6efd !important;
+            font-weight: 600;
+        }
+        
+        /* Стили для бокового меню */
+        .sidebar {
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            min-height: calc(100vh - 80px);
+            padding: 1rem 0;
+        }
+        
+        .sidebar .nav-link {
+            color: #6c757d;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+            color: #495057;
+            border-left-color: #dee2e6;
+        }
+        
+        .sidebar .nav-link.active {
+            background-color: #e7f3ff;
+            color: #0d6efd;
+            border-left-color: #0d6efd;
+            font-weight: 600;
+        }
+        
+        .main-content {
+            padding: 1rem;
+        }
+        
+        .sidebar-header {
+            padding: 0 1.5rem 1rem 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-header h6 {
+            color: #6c757d;
+            font-weight: 600;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -21,6 +94,7 @@
         const { useState, useEffect } = React;
 
         const apiService = {
+            // Пользователи
             async getUsers() {
                 const response = await fetch('/api/users');
                 if (!response.ok) throw new Error('Ошибка загрузки пользователей');
@@ -62,8 +136,237 @@
                 const response = await fetch(`/api/users/${id}`, { method: 'DELETE' });
                 if (!response.ok) throw new Error('Ошибка удаления пользователя');
                 return true;
+            },
+            
+            // Группы
+            async getGroups() {
+                const response = await fetch('/api/groups');
+                if (!response.ok) throw new Error('Ошибка загрузки групп');
+                return response.json();
+            },
+            async createGroup(group) {
+                const response = await fetch('/api/groups', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(group)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка создания группы');
+                }
+                return response.json();
+            },
+            async updateGroup(id, group) {
+                const response = await fetch(`/api/groups/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(group)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка обновления группы');
+                }
+                return response.json();
+            },
+            async deleteGroup(id) {
+                const response = await fetch(`/api/groups/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Ошибка удаления группы');
+                return true;
+            },
+            
+            // Смены
+            async getShifts() {
+                const response = await fetch('/api/shifts');
+                if (!response.ok) throw new Error('Ошибка загрузки смен');
+                return response.json();
+            },
+            
+            // Города
+            async getCities() {
+                const response = await fetch('/api/cities');
+                if (!response.ok) throw new Error('Ошибка загрузки городов');
+                return response.json();
+            },
+            async createCity(city) {
+                const response = await fetch('/api/cities', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(city)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка создания города');
+                }
+                return response.json();
+            },
+            async updateCity(id, city) {
+                const response = await fetch(`/api/cities/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(city)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка обновления города');
+                }
+                return response.json();
+            },
+            async deleteCity(id) {
+                const response = await fetch(`/api/cities/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Ошибка удаления города');
+                return true;
+            },
+            
+            // Смены
+            async getShifts() {
+                const response = await fetch('/api/shifts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(shift)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка создания смены');
+                }
+                return response.json();
+            },
+            async updateShift(id, shift) {
+                const response = await fetch(`/api/shifts/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(shift)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (errorData && typeof errorData === 'object') {
+                        const errorMessages = Object.values(errorData).join(', ');
+                        throw new Error(`Ошибка валидации: ${errorMessages}`);
+                    }
+                    throw new Error('Ошибка обновления смены');
+                }
+                return response.json();
+            },
+            async deleteShift(id) {
+                const response = await fetch(`/api/shifts/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Ошибка удаления смены');
+                return true;
             }
         };
+
+        function Header({ activeTab, onTabChange }) {
+            return (
+                <nav className="navbar navbar-expand-lg navbar-custom">
+                    <div className="container">
+                        {/* Логотип */}
+                        <a className="navbar-brand" href="#">
+                            Управление пользователями
+                        </a>
+                        
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        
+                        {/* Список кнопок */}
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                            <ul className="navbar-nav ms-auto">
+                                <li className="nav-item">
+                                    <a 
+                                        className={`nav-link ${activeTab === 'employees' ? 'active' : ''}`}
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onTabChange('employees');
+                                        }}
+                                    >
+                                        Сотрудники
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            );
+        }
+
+        function Sidebar({ activeSubTab, onSubTabChange }) {
+            return (
+                <div className="sidebar col-md-3 col-lg-2">
+                    <div className="sidebar-header">
+                        <h6>Управление</h6>
+                    </div>
+                    <ul className="nav flex-column">
+                        <li className="nav-item">
+                            <a 
+                                className={`nav-link ${activeSubTab === 'employees' ? 'active' : ''}`}
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onSubTabChange('employees');
+                                }}
+                            >
+                                Сотрудники
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a 
+                                className={`nav-link ${activeSubTab === 'groups' ? 'active' : ''}`}
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onSubTabChange('groups');
+                                }}
+                            >
+                                Группы
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a 
+                                className={`nav-link ${activeSubTab === 'shifts' ? 'active' : ''}`}
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onSubTabChange('shifts');
+                                }}
+                            >
+                                Смены
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a 
+                                className={`nav-link ${activeSubTab === 'cities' ? 'active' : ''}`}
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onSubTabChange('cities');
+                                }}
+                            >
+                                Города
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            );
+        }
 
         function UserList({ users, onUserClick, onDeleteUser, onAddUser }) {
             const [searchTerm, setSearchTerm] = useState('');
@@ -74,7 +377,7 @@
             );
 
             return (
-                <div className="container mt-4">
+                <div className="main-content">
                     <div className="d-flex justify-content-between align-items-center mb-4">
                         <h2>Список пользователей</h2>
                         <button className="btn btn-primary" onClick={onAddUser}>
@@ -100,7 +403,9 @@
                                         </h5>
                                         <p className="card-text">
                                             <strong>Должность:</strong> {user.position}<br/>
-                                            <strong>Дата рождения:</strong> {new Date(user.birthDate).toLocaleDateString('ru-RU')}
+                                            <strong>Дата рождения:</strong> {new Date(user.birthDate).toLocaleDateString('ru-RU')}<br/>
+                                            <strong>Группа:</strong> {user.groupName || 'Не назначена'}<br/>
+                                            <strong>Город:</strong> {user.cityName || 'Не назначен'}
                                         </p>
                                         <button 
                                             className="btn btn-danger btn-sm"
@@ -122,13 +427,176 @@
             );
         }
 
-        function UserForm({ user, onSave, onCancel }) {
+        function GroupsList({ groups, onGroupClick, onDeleteGroup, onAddGroup }) {
+            const [searchTerm, setSearchTerm] = useState('');
+            const filteredGroups = groups.filter(group => 
+                group.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            return (
+                <div className="main-content">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Список групп</h2>
+                        <button className="btn btn-primary" onClick={onAddGroup}>
+                            Добавить группу
+                        </button>
+                    </div>
+                    
+                    <input
+                        type="text"
+                        className="form-control mb-3"
+                        placeholder="Поиск групп..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    
+                    <div className="row">
+                        {filteredGroups.map(group => (
+                            <div key={group.id} className="col-md-6 col-lg-4 mb-3">
+                                <div className="card user-card" onClick={() => onGroupClick(group)}>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{group.name}</h5>
+                                        <p className="card-text">
+                                            <strong>Смены:</strong> {group.shiftIds ? group.shiftIds.length : 0}
+                                        </p>
+                                        <button 
+                                            className="btn btn-danger btn-sm"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (confirm('Удалить группу?')) {
+                                                    onDeleteGroup(group.id);
+                                                }
+                                            }}
+                                        >
+                                            Удалить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        function CitiesList({ cities, onCityClick, onDeleteCity, onAddCity }) {
+            const [searchTerm, setSearchTerm] = useState('');
+            const filteredCities = cities.filter(city => 
+                city.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            return (
+                <div className="main-content">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Список городов</h2>
+                        <button className="btn btn-primary" onClick={onAddCity}>
+                            Добавить город
+                        </button>
+                    </div>
+                    
+                    <input
+                        type="text"
+                        className="form-control mb-3"
+                        placeholder="Поиск городов..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    
+                    <div className="row">
+                        {filteredCities.map(city => (
+                            <div key={city.id} className="col-md-6 col-lg-4 mb-3">
+                                <div className="card user-card" onClick={() => onCityClick(city)}>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{city.name}</h5>
+                                        <p className="card-text">
+                                            <strong>Часовой пояс:</strong> {city.gmtTimezone}
+                                        </p>
+                                        <button 
+                                            className="btn btn-danger btn-sm"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (confirm('Удалить город?')) {
+                                                    onDeleteCity(city.id);
+                                                }
+                                            }}
+                                        >
+                                            Удалить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        function ShiftsList({ shifts, onShiftClick, onDeleteShift, onAddShift }) {
+            const [searchTerm, setSearchTerm] = useState('');
+            const filteredShifts = shifts.filter(shift => 
+                shift.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            const formatTime = (time) => {
+                return time.substring(0, 5); // Формат ЧЧ:ММ
+            };
+
+            return (
+                <div className="main-content">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Список смен</h2>
+                        <button className="btn btn-primary" onClick={onAddShift}>
+                            Добавить смену
+                        </button>
+                    </div>
+                    
+                    <input
+                        type="text"
+                        className="form-control mb-3"
+                        placeholder="Поиск смен..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    
+                    <div className="row">
+                        {filteredShifts.map(shift => (
+                            <div key={shift.id} className="col-md-6 col-lg-4 mb-3">
+                                <div className="card user-card" onClick={() => onShiftClick(shift)}>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{shift.name}</h5>
+                                        <p className="card-text">
+                                            <strong>Время:</strong> {formatTime(shift.startTime)} - {formatTime(shift.endTime)}<br/>
+                                            <strong>Группы:</strong> {shift.groupNames ? shift.groupNames.join(', ') : 'Нет'}
+                                        </p>
+                                        <button 
+                                            className="btn btn-danger btn-sm"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (confirm('Удалить смену?')) {
+                                                    onDeleteShift(shift.id);
+                                                }
+                                            }}
+                                        >
+                                            Удалить
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        function UserForm({ user, groups, cities, onSave, onCancel }) {
             const [formData, setFormData] = useState({
                 firstName: user?.firstName || '',
                 lastName: user?.lastName || '',
                 middleName: user?.middleName || '',
                 birthDate: user?.birthDate ? user.birthDate.split('T')[0] : '',
-                position: user?.position || ''
+                position: user?.position || '',
+                groupId: user?.groupId || '',
+                cityId: user?.cityId || ''
             });
 
             const handleSubmit = (e) => {
@@ -137,7 +605,7 @@
             };
 
             return (
-                <div className="container mt-4">
+                <div className="main-content">
                     <div className="form-container">
                         <h2>{user ? 'Редактирование пользователя' : 'Новый пользователь'}</h2>
                         
@@ -200,6 +668,349 @@
                                 </div>
                             </div>
                             
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Группа</label>
+                                    <select
+                                        className="form-control"
+                                        value={formData.groupId}
+                                        onChange={(e) => setFormData({...formData, groupId: e.target.value})}
+                                    >
+                                        <option value="">Не назначена</option>
+                                        {groups.map(group => (
+                                            <option key={group.id} value={group.id}>
+                                                {group.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Город</label>
+                                    <select
+                                        className="form-control"
+                                        value={formData.cityId}
+                                        onChange={(e) => setFormData({...formData, cityId: e.target.value})}
+                                    >
+                                        <option value="">Не назначен</option>
+                                        {cities.map(city => (
+                                            <option key={city.id} value={city.id}>
+                                                {city.name} ({city.gmtTimezone})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div className="d-flex gap-2">
+                                <button type="submit" className="btn btn-primary">Сохранить</button>
+                                <button type="button" className="btn btn-secondary" onClick={onCancel}>Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        function GroupForm({ group, shifts, onSave, onCancel }) {
+            const [formData, setFormData] = useState({
+                name: group?.name || '',
+                shiftIds: group?.shiftIds || []
+            });
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onSave(formData);
+            };
+
+            const handleShiftChange = (shiftId) => {
+                const newShiftIds = formData.shiftIds.includes(shiftId)
+                    ? formData.shiftIds.filter(id => id !== shiftId)
+                    : [...formData.shiftIds, shiftId];
+                setFormData({...formData, shiftIds: newShiftIds});
+            };
+
+            return (
+                <div className="main-content">
+                    <div className="form-container">
+                        <h2>{group ? 'Редактирование группы' : 'Новая группа'}</h2>
+                        
+                        <form onSubmit={handleSubmit}>
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Название группы *</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="row">
+                                <div className="col-md-12 mb-3">
+                                    <label className="form-label">Смены</label>
+                                    <div className="row">
+                                        {shifts.map(shift => (
+                                            <div key={shift.id} className="col-md-4 mb-2">
+                                                <div className="form-check">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        id={`shift-${shift.id}`}
+                                                        checked={formData.shiftIds.includes(shift.id)}
+                                                        onChange={() => handleShiftChange(shift.id)}
+                                                    />
+                                                    <label className="form-check-label" htmlFor={`shift-${shift.id}`}>
+                                                        {shift.name} ({shift.startTime.substring(0, 5)} - {shift.endTime.substring(0, 5)})
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="d-flex gap-2">
+                                <button type="submit" className="btn btn-primary">Сохранить</button>
+                                <button type="button" className="btn btn-secondary" onClick={onCancel}>Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+                function CityForm({ city, onSave, onCancel, existingCities = [] }) {
+            const [formData, setFormData] = useState({
+                name: city?.name || '',
+                gmtTimezone: city?.gmtTimezone || ''
+            });
+
+            // Список русских городов с их часовыми поясами
+            const russianCities = [
+                { name: 'Москва', timezone: 'GMT+3' },
+                { name: 'Санкт-Петербург', timezone: 'GMT+3' },
+                { name: 'Екатеринбург', timezone: 'GMT+5' },
+                { name: 'Новосибирск', timezone: 'GMT+7' },
+                { name: 'Казань', timezone: 'GMT+3' },
+                { name: 'Нижний Новгород', timezone: 'GMT+3' },
+                { name: 'Челябинск', timezone: 'GMT+5' },
+                { name: 'Самара', timezone: 'GMT+4' },
+                { name: 'Уфа', timezone: 'GMT+5' },
+                { name: 'Ростов-на-Дону', timezone: 'GMT+3' },
+                { name: 'Краснодар', timezone: 'GMT+3' },
+                { name: 'Воронеж', timezone: 'GMT+3' },
+                { name: 'Пермь', timezone: 'GMT+5' },
+                { name: 'Волгоград', timezone: 'GMT+3' },
+                { name: 'Красноярск', timezone: 'GMT+7' },
+                { name: 'Саратов', timezone: 'GMT+4' },
+                { name: 'Тюмень', timezone: 'GMT+5' },
+                { name: 'Тольятти', timezone: 'GMT+4' },
+                { name: 'Ижевск', timezone: 'GMT+4' },
+                { name: 'Барнаул', timezone: 'GMT+7' },
+                { name: 'Ульяновск', timezone: 'GMT+4' },
+                { name: 'Иркутск', timezone: 'GMT+8' },
+                { name: 'Хабаровск', timezone: 'GMT+10' },
+                { name: 'Владивосток', timezone: 'GMT+10' },
+                { name: 'Ярославль', timezone: 'GMT+3' },
+                { name: 'Томск', timezone: 'GMT+7' },
+                { name: 'Кемерово', timezone: 'GMT+7' },
+                { name: 'Набережные Челны', timezone: 'GMT+3' },
+                { name: 'Рязань', timezone: 'GMT+3' },
+                { name: 'Астрахань', timezone: 'GMT+4' },
+                { name: 'Пенза', timezone: 'GMT+3' },
+                { name: 'Липецк', timezone: 'GMT+3' },
+                { name: 'Киров', timezone: 'GMT+3' },
+                { name: 'Чебоксары', timezone: 'GMT+3' },
+                { name: 'Тула', timezone: 'GMT+3' },
+                { name: 'Калининград', timezone: 'GMT+2' },
+                { name: 'Балашиха', timezone: 'GMT+3' },
+                { name: 'Химки', timezone: 'GMT+3' },
+                { name: 'Сочи', timezone: 'GMT+3' },
+                { name: 'Ставрополь', timezone: 'GMT+3' },
+                { name: 'Грозный', timezone: 'GMT+3' },
+                { name: 'Улан-Удэ', timezone: 'GMT+8' },
+                { name: 'Владикавказ', timezone: 'GMT+3' },
+                { name: 'Махачкала', timezone: 'GMT+3' },
+                { name: 'Симферополь', timezone: 'GMT+3' },
+                { name: 'Йошкар-Ола', timezone: 'GMT+3' },
+                { name: 'Севастополь', timezone: 'GMT+3' },
+                { name: 'Петрозаводск', timezone: 'GMT+3' },
+                { name: 'Сыктывкар', timezone: 'GMT+3' },
+                { name: 'Нальчик', timezone: 'GMT+3' },
+                { name: 'Черкесск', timezone: 'GMT+3' },
+                { name: 'Саранск', timezone: 'GMT+3' },
+                { name: 'Владимир', timezone: 'GMT+3' },
+                { name: 'Вологда', timezone: 'GMT+3' },
+                { name: 'Чита', timezone: 'GMT+9' },
+                { name: 'Салехард', timezone: 'GMT+5' },
+                { name: 'Магадан', timezone: 'GMT+11' },
+                { name: 'Петропавловск-Камчатский', timezone: 'GMT+12' }
+            ];
+
+            const handleCitySelect = (e) => {
+                const selectedCity = russianCities.find(city => city.name === e.target.value);
+                if (selectedCity) {
+                    setFormData({
+                        name: selectedCity.name,
+                        gmtTimezone: selectedCity.timezone
+                    });
+                }
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onSave(formData);
+            };
+
+            // Проверяем, какие города уже добавлены
+            const existingCityNames = existingCities.map(c => c.name);
+
+            return (
+                <div className="main-content">
+                    <div className="form-container">
+                        <h2>{city ? 'Редактирование города' : 'Новый город'}</h2>
+                        
+                        <form onSubmit={handleSubmit}>
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Выберите город *</label>
+                                    <select
+                                        className="form-control"
+                                        value={formData.name}
+                                        onChange={handleCitySelect}
+                                        required
+                                    >
+                                        <option value="">Выберите город...</option>
+                                        {russianCities.map((cityOption, index) => {
+                                            const isDisabled = existingCityNames.includes(cityOption.name) && cityOption.name !== city?.name;
+                                            return (
+                                                <option 
+                                                    key={index} 
+                                                    value={cityOption.name}
+                                                    disabled={isDisabled}
+                                                >
+                                                    {cityOption.name}{isDisabled ? ' (уже добавлен)' : ''}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </div>
+                                
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Часовой пояс GMT *</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="GMT+3"
+                                        value={formData.gmtTimezone}
+                                        onChange={(e) => setFormData({...formData, gmtTimezone: e.target.value})}
+                                        required
+                                        readOnly
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="d-flex gap-2">
+                                <button type="submit" className="btn btn-primary">Сохранить</button>
+                                <button type="button" className="btn btn-secondary" onClick={onCancel}>Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        function ShiftForm({ shift, groups, onSave, onCancel }) {
+            const [formData, setFormData] = useState({
+                name: shift?.name || '',
+                startTime: shift?.startTime ? shift.startTime.substring(0, 5) : '',
+                endTime: shift?.endTime ? shift.endTime.substring(0, 5) : '',
+                groupIds: shift?.groupIds || []
+            });
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onSave(formData);
+            };
+
+            const handleGroupChange = (groupId) => {
+                const newGroupIds = formData.groupIds.includes(groupId)
+                    ? formData.groupIds.filter(id => id !== groupId)
+                    : [...formData.groupIds, groupId];
+                setFormData({...formData, groupIds: newGroupIds});
+            };
+
+            return (
+                <div className="main-content">
+                    <div className="form-container">
+                        <h2>{shift ? 'Редактирование смены' : 'Новая смена'}</h2>
+                        
+                        <form onSubmit={handleSubmit}>
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Название смены *</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Время начала *</label>
+                                    <input
+                                        type="time"
+                                        className="form-control"
+                                        value={formData.startTime}
+                                        onChange={(e) => setFormData({...formData, startTime: e.target.value})}
+                                        required
+                                    />
+                                </div>
+                                
+                                <div className="col-md-6 mb-3">
+                                    <label className="form-label">Время окончания *</label>
+                                    <input
+                                        type="time"
+                                        className="form-control"
+                                        value={formData.endTime}
+                                        onChange={(e) => setFormData({...formData, endTime: e.target.value})}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="row">
+                                <div className="col-md-12 mb-3">
+                                    <label className="form-label">Группы</label>
+                                    <div className="row">
+                                        {groups.map(group => (
+                                            <div key={group.id} className="col-md-4 mb-2">
+                                                <div className="form-check">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        id={`group-${group.id}`}
+                                                        checked={formData.groupIds.includes(group.id)}
+                                                        onChange={() => handleGroupChange(group.id)}
+                                                    />
+                                                    <label className="form-check-label" htmlFor={`group-${group.id}`}>
+                                                        {group.name}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div className="d-flex gap-2">
                                 <button type="submit" className="btn btn-primary">Сохранить</button>
                                 <button type="button" className="btn btn-secondary" onClick={onCancel}>Отмена</button>
@@ -212,10 +1023,18 @@
 
         function App() {
             const [users, setUsers] = useState([]);
+            const [groups, setGroups] = useState([]);
+            const [shifts, setShifts] = useState([]);
+            const [cities, setCities] = useState([]);
             const [currentView, setCurrentView] = useState('list');
             const [currentUser, setCurrentUser] = useState(null);
+            const [currentGroup, setCurrentGroup] = useState(null);
+            const [currentShift, setCurrentShift] = useState(null);
+            const [currentCity, setCurrentCity] = useState(null);
             const [loading, setLoading] = useState(true);
             const [error, setError] = useState(null);
+            const [activeTab, setActiveTab] = useState('employees');
+            const [activeSubTab, setActiveSubTab] = useState('employees');
 
             const loadUsers = async () => {
                 try {
@@ -230,18 +1049,78 @@
                 }
             };
 
+            const loadGroups = async () => {
+                try {
+                    const data = await apiService.getGroups();
+                    setGroups(data);
+                } catch (err) {
+                    console.error('Ошибка загрузки групп:', err);
+                }
+            };
+
+            const loadShifts = async () => {
+                try {
+                    const data = await apiService.getShifts();
+                    setShifts(data);
+                } catch (err) {
+                    console.error('Ошибка загрузки смен:', err);
+                }
+            };
+            
+            const loadCities = async () => {
+                try {
+                    const data = await apiService.getCities();
+                    setCities(data);
+                } catch (err) {
+                    console.error('Ошибка загрузки городов:', err);
+                }
+            };
+
             useEffect(() => {
                 loadUsers();
+                loadGroups();
+                loadShifts();
+                loadCities();
             }, []);
 
             const handleUserClick = (user) => {
                 setCurrentUser(user);
-                setCurrentView('form');
+                setCurrentView('userForm');
+            };
+
+            const handleGroupClick = (group) => {
+                setCurrentGroup(group);
+                setCurrentView('groupForm');
+            };
+
+            const handleShiftClick = (shift) => {
+                setCurrentShift(shift);
+                setCurrentView('shiftForm');
+            };
+            
+            const handleCityClick = (city) => {
+                setCurrentCity(city);
+                setCurrentView('cityForm');
             };
 
             const handleAddUser = () => {
                 setCurrentUser(null);
-                setCurrentView('form');
+                setCurrentView('userForm');
+            };
+
+            const handleAddGroup = () => {
+                setCurrentGroup(null);
+                setCurrentView('groupForm');
+            };
+
+            const handleAddShift = () => {
+                setCurrentShift(null);
+                setCurrentView('shiftForm');
+            };
+            
+            const handleAddCity = () => {
+                setCurrentCity(null);
+                setCurrentView('cityForm');
             };
 
             const handleSaveUser = async (userData) => {
@@ -265,6 +1144,69 @@
                 }
             };
 
+            const handleSaveGroup = async (groupData) => {
+                try {
+                    setLoading(true);
+                    setError(null);
+                    
+                    if (currentGroup) {
+                        await apiService.updateGroup(currentGroup.id, groupData);
+                    } else {
+                        await apiService.createGroup(groupData);
+                    }
+                    
+                    await loadGroups();
+                    setCurrentView('list');
+                    setCurrentGroup(null);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const handleSaveShift = async (shiftData) => {
+                try {
+                    setLoading(true);
+                    setError(null);
+                    
+                    if (currentShift) {
+                        await apiService.updateShift(currentShift.id, shiftData);
+                    } else {
+                        await apiService.createShift(shiftData);
+                    }
+                    
+                    await loadShifts();
+                    setCurrentView('list');
+                    setCurrentShift(null);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            
+            const handleSaveCity = async (cityData) => {
+                try {
+                    setLoading(true);
+                    setError(null);
+                    
+                    if (currentCity) {
+                        await apiService.updateCity(currentCity.id, cityData);
+                    } else {
+                        await apiService.createCity(cityData);
+                    }
+                    
+                    await loadCities();
+                    setCurrentView('list');
+                    setCurrentCity(null);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
             const handleDeleteUser = async (userId) => {
                 try {
                     setLoading(true);
@@ -278,40 +1220,169 @@
                 }
             };
 
+            const handleDeleteGroup = async (groupId) => {
+                try {
+                    setLoading(true);
+                    setError(null);
+                    await apiService.deleteGroup(groupId);
+                    await loadGroups();
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const handleDeleteShift = async (shiftId) => {
+                try {
+                    setLoading(true);
+                    setError(null);
+                    await apiService.deleteShift(shiftId);
+                    await loadShifts();
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            
+            const handleDeleteCity = async (cityId) => {
+                try {
+                    setLoading(true);
+                    setError(null);
+                    await apiService.deleteCity(cityId);
+                    await loadCities();
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
             const handleCancel = () => {
                 setCurrentView('list');
                 setCurrentUser(null);
+                setCurrentGroup(null);
+                setCurrentShift(null);
+                setCurrentCity(null);
+                setError(null);
+            };
+
+            const handleTabChange = (tab) => {
+                setActiveTab(tab);
+                setCurrentView('list');
+                setCurrentUser(null);
+                setCurrentGroup(null);
+                setCurrentShift(null);
+                setCurrentCity(null);
+                setError(null);
+                setActiveSubTab('employees');
+            };
+
+            const handleSubTabChange = (subTab) => {
+                setActiveSubTab(subTab);
+                setCurrentView('list');
+                setCurrentUser(null);
+                setCurrentGroup(null);
+                setCurrentShift(null);
+                setCurrentCity(null);
                 setError(null);
             };
 
             if (loading && users.length === 0) {
                 return (
-                    <div className="text-center mt-5">
-                        <div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Загрузка...</span>
+                    <div>
+                        <Header activeTab={activeTab} onTabChange={handleTabChange} />
+                        <div className="text-center mt-5">
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="visually-hidden">Загрузка...</span>
+                            </div>
+                            <p className="mt-2">Загрузка пользователей...</p>
                         </div>
-                        <p className="mt-2">Загрузка пользователей...</p>
                     </div>
                 );
             }
 
             return (
                 <div>
+                    <Header activeTab={activeTab} onTabChange={handleTabChange} />
                     {error && <div className="alert alert-danger m-3">{error}</div>}
                     
-                    {currentView === 'list' ? (
-                        <UserList
-                            users={users}
-                            onUserClick={handleUserClick}
-                            onDeleteUser={handleDeleteUser}
-                            onAddUser={handleAddUser}
-                        />
+                    {activeTab === 'employees' ? (
+                        <div className="row">
+                            <Sidebar activeSubTab={activeSubTab} onSubTabChange={handleSubTabChange} />
+                            <div className="col-md-9 col-lg-10">
+                                {currentView === 'list' ? (
+                                    activeSubTab === 'employees' ? (
+                                        <UserList
+                                            users={users}
+                                            onUserClick={handleUserClick}
+                                            onDeleteUser={handleDeleteUser}
+                                            onAddUser={handleAddUser}
+                                        />
+                                    ) : activeSubTab === 'groups' ? (
+                                        <GroupsList
+                                            groups={groups}
+                                            onGroupClick={handleGroupClick}
+                                            onDeleteGroup={handleDeleteGroup}
+                                            onAddGroup={handleAddGroup}
+                                        />
+                                    ) : activeSubTab === 'cities' ? (
+                                        <CitiesList
+                                            cities={cities}
+                                            onCityClick={handleCityClick}
+                                            onDeleteCity={handleDeleteCity}
+                                            onAddCity={handleAddCity}
+                                        />
+                                    ) : (
+                                        <ShiftsList
+                                            shifts={shifts}
+                                            onShiftClick={handleShiftClick}
+                                            onDeleteShift={handleDeleteShift}
+                                            onAddShift={handleAddShift}
+                                        />
+                                    )
+                                ) : currentView === 'userForm' ? (
+                                    <UserForm
+                                        user={currentUser}
+                                        groups={groups}
+                                        cities={cities}
+                                        onSave={handleSaveUser}
+                                        onCancel={handleCancel}
+                                    />
+                                ) : currentView === 'groupForm' ? (
+                                    <GroupForm
+                                        group={currentGroup}
+                                        shifts={shifts}
+                                        onSave={handleSaveGroup}
+                                        onCancel={handleCancel}
+                                    />
+                                                                 ) : currentView === 'cityForm' ? (
+                                     <CityForm
+                                         city={currentCity}
+                                         existingCities={cities}
+                                         onSave={handleSaveCity}
+                                         onCancel={handleCancel}
+                                     />
+                                ) : (
+                                    <ShiftForm
+                                        shift={currentShift}
+                                        groups={groups}
+                                        onSave={handleSaveShift}
+                                        onCancel={handleCancel}
+                                    />
+                                )}
+                            </div>
+                        </div>
                     ) : (
-                        <UserForm
-                            user={currentUser}
-                            onSave={handleSaveUser}
-                            onCancel={handleCancel}
-                        />
+                        <div className="container mt-4">
+                            <UserList
+                                users={users}
+                                onUserClick={handleUserClick}
+                                onDeleteUser={handleDeleteUser}
+                                onAddUser={handleAddUser}
+                            />
+                        </div>
                     )}
                 </div>
             );

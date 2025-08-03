@@ -2,6 +2,7 @@ package com.example.duty.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
 
 public class UserDto {
@@ -17,21 +18,30 @@ public class UserDto {
     private String middleName;
     
     @NotNull(message = "Дата рождения обязательна для заполнения")
+    @Past(message = "Дата рождения должна быть в прошлом")
     private LocalDate birthDate;
     
     @NotBlank(message = "Должность обязательна для заполнения")
     private String position;
     
+    private Long groupId;
+    private String groupName;
+    private Long cityId;
+    private String cityName;
+    
     // Конструкторы
     public UserDto() {}
     
-    public UserDto(Long id, String firstName, String lastName, String middleName, LocalDate birthDate, String position) {
+    public UserDto(Long id, String firstName, String lastName, String middleName, 
+                   LocalDate birthDate, String position, Long groupId, String groupName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.birthDate = birthDate;
         this.position = position;
+        this.groupId = groupId;
+        this.groupName = groupName;
     }
     
     // Геттеры и сеттеры
@@ -83,6 +93,38 @@ public class UserDto {
         this.position = position;
     }
     
+    public Long getGroupId() {
+        return groupId;
+    }
+    
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+    
+    public String getGroupName() {
+        return groupName;
+    }
+    
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+    
+    public Long getCityId() {
+        return cityId;
+    }
+    
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
+    }
+    
+    public String getCityName() {
+        return cityName;
+    }
+    
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+    
     @Override
     public String toString() {
         return "UserDto{" +
@@ -92,6 +134,8 @@ public class UserDto {
                 ", middleName='" + middleName + '\'' +
                 ", birthDate=" + birthDate +
                 ", position='" + position + '\'' +
+                ", groupId=" + groupId +
+                ", groupName='" + groupName + '\'' +
                 '}';
     }
 } 
